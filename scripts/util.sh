@@ -8,6 +8,7 @@ main() (
     # Var
     export postgreshost=postgres-scratch
     export mysqlhost=mysql-scratch
+    export mysqlport=3307
     export auth=scratch
 
     # Run
@@ -15,8 +16,8 @@ main() (
         case $command in
             connect_mysql) connect_mysql ;;
             c|connect|connect_postgres) connect_postgres ;;
-            p|postgres) postgres ;;
-            m|mysql) mysql ;;
+            p|postgres) db_postgres ;;
+            m|mysql) db_mysql ;;
             clean) clean ;;
         esac
     done
@@ -54,7 +55,7 @@ connect_mysql() {
 }
 
 
-postgres() {
+db_postgres() {
     network_create
     docker run \
         --rm \
@@ -70,12 +71,12 @@ postgres() {
 }
 
 
-mysql() {
+db_mysql() {
     network_create
     docker run \
         --detach \
         --network "$auth" \
-        --publish 3306:3306 \
+        --publish "${mysqlport}:3306" \
         --name "$mysqlhost" \
         --env "MYSQL_ROOT_PASSWORD=$auth" \
         --env "MYSQL_DATABASE=$auth" \
