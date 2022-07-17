@@ -4,6 +4,7 @@
 # SQL for assignments.
 #
 
+
 main() (
     # Var
     export postgreshost=postgres-scratch
@@ -58,7 +59,7 @@ connect_mysql() {
 db_postgres() {
     network_create
     docker run \
-        --rm \
+        --restart unless-stopped \
         --detach \
         --publish 5432:5432 \
         --network "$auth" \
@@ -74,6 +75,7 @@ db_postgres() {
 db_mysql() {
     network_create
     docker run \
+        --restart unless-stopped \
         --detach \
         --network "$auth" \
         --publish "${mysqlport}:3306" \

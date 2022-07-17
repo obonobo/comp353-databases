@@ -73,13 +73,13 @@ CREATE TABLE VaccineCompany (
 
 
 -- Clear database
-DROP TABLE Region;
-DROP TABLE Country;
-DROP TABLE Article;
-DROP TABLE Organization;
-DROP TABLE Researcher;
-DROP TABLE Users;
 DROP TABLE VaccineCompany;
+DROP TABLE Users;
+DROP TABLE Researcher;
+DROP TABLE Organization;
+DROP TABLE Article;
+DROP TABLE Country;
+DROP TABLE Region;
 
 
 -- Insert statements
@@ -547,22 +547,40 @@ INSERT INTO `Article` VALUES
 );
 
 -- q1
-SELECT rName AS regionName, SUM(totPopulation) AS totalPopulation, SUM(totDeaths) AS totalDeaths, totalVaccinated
-FROM Region r2, Country c2,
-	(SELECT r.rID AS regionID, SUM(vacTotal) AS totalVaccinated
-	 FROM Region r, Country c, VaccineCompany vc
-	 WHERE r.rID = c.rID AND c.cID = vc.cID
-	 GROUP BY rName
-	 ORDER BY rName ASC) sub
-WHERE r2.rID = c2.rID AND r2.rID = regionID
+SELECT rName AS regionName,
+    SUM(totPopulation) AS totalPopulation,
+    SUM(totDeaths) AS totalDeaths,
+    totalVaccinated
+FROM Region r2,
+    Country c2,
+    (
+        SELECT r.rID AS regionID,
+            SUM(vacTotal) AS totalVaccinated
+        FROM Region r,
+            Country c,
+            VaccineCompany vc
+        WHERE r.rID = c.rID
+            AND c.cID = vc.cID
+        GROUP BY rName
+        ORDER BY rName ASC
+    ) sub
+WHERE r2.rID = c2.rID
+    AND r2.rID = regionID
 GROUP BY rName
 ORDER BY rName ASC;
 
 -- q2
-SELECT Region.rName, Country.cName, Country.totPopulation, Country.totDeaths, SUM(VaccineCompany.vacTotal) AS VaccinatedPeople FROM Region,Country,VaccineCompany
+SELECT Region.rName,
+    Country.cName,
+    Country.totPopulation,
+    Country.totDeaths,
+    SUM(VaccineCompany.vacTotal) AS VaccinatedPeople
+FROM Region,
+    Country,
+    VaccineCompany
 WHERE Region.rID = Country.rID AND Country.cID = VaccineCompany.cID
 GROUP BY Country.cName, Region.rName
-ORDER BY rName,cName;
+ORDER BY rName, cName;
 
 -- q3
 SELECT compName AS vaccineName,
@@ -579,22 +597,63 @@ ORDER BY vaccinatedButDead ASC;
 
 -- q4
 WITH
-    cte1 AS
- (SELECT Region.rName,COUNT(Article.aID) AS totRegionArticles FROM Region,Country,Researcher, Article
-WHERE  Article.researcherID = Researcher.researcherID AND Country.rID = Region.rID AND Researcher.cID = Country.cID
-GROUP BY Region.rID),
-    cte2 AS (SELECT Region.rName, COUNT(Researcher.cID) AS totRegionResearchers FROM Region,Country,Researcher
-WHERE   Country.rID = Region.rID AND Researcher.cID = Country.cID
-GROUP BY Region.rID),
-    cte3 AS (SELECT Region.rName,SUM(Country.totPopulation) AS RegionPopulation FROM Region,Country,Researcher
-WHERE  Country.rID = Region.rID AND Researcher.cID = Country.cID
-GROUP BY Country.rID),
-    cte4 AS (SELECT rName,COUNT(Researcher.cID) AS totRegionResearchers,SUM(Country.totPopulation) AS RegionPopulation, COUNT(Researcher.cID)/SUM(Country.totPopulation) * 100000 AS avgNumResearcherByTotPopRegionPer100k FROM Region,Country,Researcher
-WHERE  Country.rID = Region.rID AND Researcher.cID = Country.cID
-GROUP BY Country.rID)
-
-SELECT cte1.rName,cte3.RegionPopulation,cte2.totRegionResearchers,cte1.totRegionArticles,cte1.totRegionArticles/cte2.totRegionResearchers AS ArticlesPerRegion,cte4.avgNumResearcherByTotPopRegionPer100k  FROM cte1 JOIN cte2 JOIN cte3 JOIN cte4
-WHERE cte1.rName = cte2.rName AND cte2.rName = cte3.rName AND cte2.rName = cte4.rName
+    cte1 AS (
+        SELECT Region.rName,
+            COUNT(Article.aID) AS totRegionArticles
+        FROM Region,
+            Country,
+            Researcher,
+            Article
+        WHERE Article.researcherID = Researcher.researcherID
+            AND Country.rID = Region.rID
+            AND Researcher.cID = Country.cID
+        GROUP BY Region.rID
+    ),
+    cte2 AS (
+        SELECT Region.rName,
+            COUNT(Researcher.cID) AS totRegionResearchers
+        FROM Region,
+            Country,
+            Researcher
+        WHERE Country.rID = Region.rID
+            AND Researcher.cID = Country.cID
+        GROUP BY Region.rID
+    ),
+    cte3 AS (
+        SELECT Region.rName,
+            SUM(Country.totPopulation) AS RegionPopulation
+        FROM Region,
+            Country,
+            Researcher
+        WHERE Country.rID = Region.rID
+            AND Researcher.cID = Country.cID
+        GROUP BY Country.rID
+    ),
+    cte4 AS (
+        SELECT rName,
+            COUNT(Researcher.cID) AS totRegionResearchers,
+            SUM(Country.totPopulation) AS RegionPopulation,
+            COUNT(Researcher.cID) / SUM(Country.totPopulation) * 100000 AS avgNumResearcherByTotPopRegionPer100k
+        FROM Region,
+            Country,
+            Researcher
+        WHERE Country.rID = Region.rID
+            AND Researcher.cID = Country.cID
+        GROUP BY Country.rID
+    )
+SELECT cte1.rName,
+    cte3.RegionPopulation,
+    cte2.totRegionResearchers,
+    cte1.totRegionArticles,
+    cte1.totRegionArticles / cte2.totRegionResearchers AS ArticlesPerRegion,
+    cte4.avgNumResearcherByTotPopRegionPer100k
+FROM cte1
+    JOIN cte2
+    JOIN cte3
+    JOIN cte4
+WHERE cte1.rName = cte2.rName
+    AND cte2.rName = cte3.rName
+    AND cte2.rName = cte4.rName
 ORDER BY avgNumResearcherByTotPopRegionPer100k ASC;
 
 -- q8
