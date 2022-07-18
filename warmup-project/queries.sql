@@ -547,22 +547,14 @@ INSERT INTO `Article` VALUES
 );
 
 -- q1
-SELECT rName AS regionName,
-    SUM(totPopulation) AS totalPopulation,
-    SUM(totDeaths) AS totalDeaths
-FROM Region r,
-    Country c
-WHERE r.rID = c.rID
-GROUP BY rName
-ORDER BY rName ASC;
-
-SELECT rName AS regionName,
-    SUM(vacTotal) AS totalVaccinated
-FROM Region r,
-    Country c,
-    VaccineCompany vc
-WHERE r.rID = c.rID
-    AND c.cID = vc.cID
+SELECT rName AS regionName, SUM(totPopulation) AS totalPopulation, SUM(totDeaths) AS totalDeaths, totalVaccinated
+FROM Region r2, Country c2,
+	(SELECT r.rID AS regionID, SUM(vacTotal) AS totalVaccinated
+	 FROM Region r, Country c, VaccineCompany vc
+	 WHERE r.rID = c.rID AND c.cID = vc.cID
+	 GROUP BY rName
+	 ORDER BY rName ASC) sub
+WHERE r2.rID = c2.rID AND r2.rID = regionID
 GROUP BY rName
 ORDER BY rName ASC;
 
