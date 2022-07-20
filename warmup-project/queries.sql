@@ -694,23 +694,17 @@ ORDER BY articlesPosted DESC;
 
 -- q10
 SELECT Users.fName,
+    Users.researcherID,
     Users.lName,
     email,
     phoneNum,
     dateOfBirth,
-    Country.cName AS citizenship,
-    COUNT(aID) AS articlesPosted
+    Country.cName AS citizenship
 FROM Users
     JOIN Country ON Users.cID = Country.cID
     JOIN Researcher ON Users.researcherID = Researcher.researcherID
-    JOIN Article ON Users.researcherID = Article.researcherID
 WHERE Users.researcherID NOT IN (
-        SELECT researcherID
+        SELECT DISTINCT(researcherID)
         FROM Article
-    )
-GROUP BY Users.fName,
-    Users.lName,
-    email,
-    phoneNum,
-    dateOfBirth,
-    citizenship;
+        WHERE researcherID IS NOT NULL
+    );
