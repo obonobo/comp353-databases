@@ -22,10 +22,19 @@ CREATE TABLE proStaTer(
 pstID INTEGER AUTO_INCREMENT PRIMARY KEY,
 cID INTEGER,
 pstName VARCHAR(255),
-totPopulation INTEGER,
-totDeaths INTEGER,
-infectedNoVaccine INTEGER,
 FOREIGN KEY (cID) REFERENCES Country(cID)
+);
+
+CREATE TABLE proStaTerRecords
+(
+    pstID INTEGER,
+    totPopulation     INTEGER,
+    totDeaths         INTEGER,
+    infectedNoVaccine INTEGER,
+    timestamp DATETIME,
+
+    PRIMARY KEY (pstID,timestamp),
+    FOREIGN KEY (pstID) REFERENCES proStaTer(pstID)
 );
 
 CREATE TABLE Users (
@@ -82,11 +91,20 @@ CREATE TABLE orgDelagate (
 CREATE TABLE VaccineCompany (
     compID INTEGER AUTO_INCREMENT PRIMARY KEY,
     vaccine VARCHAR(255),
+    pstID INTEGER,
+    FOREIGN KEY (pstID) REFERENCES proStaTer(pstID)
+);
+
+CREATE TABLE VaccineRecords(
+
+    compID INTEGER,
     vacButInfected INTEGER,
     vacButDied INTEGER,
     vacTotal INTEGER,
-    pstID INTEGER,
-    FOREIGN KEY (pstID) REFERENCES proStaTer(pstID)
+    timestamp DATETIME,
+
+    PRIMARY KEY (compID,timestamp),
+    FOREIGN KEY (compID) REFERENCES VaccineCompany(compID)
 );
 
 CREATE TABLE Suspension (
