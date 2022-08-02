@@ -21,14 +21,13 @@ CREATE TABLE Organization (
 );
 
 CREATE TABLE proStaTer(
-pstID INTEGER AUTO_INCREMENT PRIMARY KEY,
-cID INTEGER,
-pstName VARCHAR(255),
-FOREIGN KEY (cID) REFERENCES Country(cID)
+    pstID INTEGER AUTO_INCREMENT PRIMARY KEY,
+    cID INTEGER,
+    pstName VARCHAR(255),
+    FOREIGN KEY (cID) REFERENCES Country(cID)
 );
 
-CREATE TABLE proStaTerRecords
-(
+CREATE TABLE proStaTerRecords (
     pstID INTEGER,
     totPopulation     INTEGER,
     totDeaths         INTEGER,
@@ -137,7 +136,7 @@ INSERT INTO Country (cName, rID) VALUES
 ('Laos', 5),
 ('USA', 2),
 ('Canada', 2);
- 
+
 INSERT INTO proStaTer (cID, pstName, totPopulation, totDeaths, infectedNoVaccine) VALUES
 (10, 'Quebec', 9928163, 746923, 6993463),
 (10, 'British-Columbia', 6681963, 546421, 4393421),
@@ -241,7 +240,7 @@ INSERT INTO VaccineCompany (vaccine,vacButInfected,vacButDied,vacTotal,pstID) VA
   ('Moderna',1486060,1356916,1259874,20),
   ('Johnson & Johnson',756324,566345,744889,20),
   ('AstraZeneca',1928391,1630791,710535,20);
- 
+
 INSERT INTO Organization (orgName, orgType, cID) VALUES
 ('At Institute', 'ResearchCenter', 1),
 ('Urna PC', 'GovernmentAgency', 2),
@@ -256,7 +255,7 @@ INSERT INTO Organization (orgName, orgType, cID) VALUES
 ('ProCabs', 'GovernmentAgency', 3),
 ('Sectum SMP', 'ResearchCenter', 9),
 ('Doremi Incorporated', 'Company', 7);
- 
+
 INSERT INTO Users (fName, lName, dateOfBirth, phoneNum, email, uType, pstID) VALUES
 ('Freddie', 'Gibbs', '1964-02-24', '8054561431', 'cras@google.edu', 'orgDelegate', 1),
 ('Zeph', 'Hammond', '1974-01-21', '033576118', 'ipsum@google.net', 'researcher', 2),
@@ -289,7 +288,7 @@ INSERT INTO Users (fName, lName, dateOfBirth, phoneNum, email, uType, pstID) VAL
 ('Amena','Nash','2023-01-18','(687) 164-0971','orciini@outlook.couk', 'orgDelegate', 12),
 ('Joelle','Davidson','2023-04-25','(694) 126-1646','telldisse@protonmail.com', 'researcher', 20);
 
-INSERT INTO specialUser (uID, username, password) VALUES 
+INSERT INTO specialUser (uID, username, password) VALUES
 (1, 'freddster', 'ksjdfh234'),
 (2, 'zeddphyrus', '12893add'),
 (3, 'killarvs', 'kjdfh_28'),
@@ -317,7 +316,7 @@ INSERT INTO specialUser (uID, username, password) VALUES
 (29, 'amenita', 'nashynash1000'),
 (30, 'jojo111', 'jld1995');
 
-INSERT INTO Admin (uID) VALUES 
+INSERT INTO Admin (uID) VALUES
 (3),
 (9),
 (14),
@@ -395,24 +394,22 @@ INSERT INTO proStaTerRecords (pstID, totPopulation, totDeaths, infectedNoVaccine
 
 -- ******* QUERIES *******
 
-/* 
+/*
  * QUERY 10
- * 
+ *
  **/
-
 SELECT uType AS role, IFNULL(username, 'NONE'), fName AS firstName, lName AS lastName, cName AS citizenship, email, phoneNum
 FROM Users u, (SELECT u.uID, username
 	  FROM Users u LEFT JOIN specialUser su
-	  ON u.uID = su.uID) AS allUsers, 
-proStaTer pst, Country c 
+	  ON u.uID = su.uID) AS allUsers,
+proStaTer pst, Country c
 WHERE u.uID = allUsers.uID AND u.pstID = pst.pstID AND pst.cID = c.cID
 ORDER BY role, citizenship ASC;
 
-/* 
+/*
  * QUERY 13
- * 
+ *
  **/
-
 WITH
 cte1 AS
     (SELECT specialUser.username,Suspension.uID,suspendDate FROM Suspension LEFT JOIN specialUser ON Suspension.uID = specialUser.uID)
@@ -421,40 +418,36 @@ SELECT cte1.username,fName,lName,cName,email,phoneNum,cte1.suspendDate FROM cte1
 WHERE Users.uID IN (SELECT uID FROM Suspension) AND Users.pstID = proStaTer.pstID AND proStaTer.cID = Country.cID AND cte1.uID = Users.uID
 ORDER BY suspendDate;
 
-/* 
+/*
  * QUERY 14
- * 
+ *
  **/
- 
 SELECT pubDate,majTopic,minTopic,summary,artTitle FROM Article
 WHERE Article.authName = '' #some input
 ORDER BY pubDate;
 
-/* 
+/*
  * QUERY 15
- * 
+ *
  **/
- 
 SELECT authName,cName,COUNT(artTitle) AS numOfPublications FROM Article,Users,proStaTer, Country
 WHERE Article.uID = Users.uID AND Users.pstID = proStaTer.pstID AND proStaTer.cID = Country.cID
 GROUP BY Article.uID
 ORDER BY numOfPublications DESC;
 
-/* 
+/*
  * QUERY 16
- * 
+ *
  **/
-
 SELECT rName,cName,COUNT(authName) AS totAuthors,COUNT(artTitle) AS numOfPublications FROM Region,Country,Article, Users, proStaTer
 WHERE Country.rID = Region.rID AND Article.uID = Users.uID AND Users.pstID = proStaTer.pstID and proStaTer.cID = Country.cID
 GROUP BY cName,rName
 ORDER BY rName ASC, numOfPublications DESC;
 
-/* 
+/*
  * QUERY 17
- * 
+ *
  **/
- 
 WITH
     cte1 AS (SELECT pstName,proStaTer.pstID,SUM(vacTotal) AS totalVaccinated,SUM(vacButDied) AS totalVaccinatedbutDied FROM VaccineCompany,proStaTer
              WHERE proStaTer.pstID = VaccineCompany.pstID
@@ -462,11 +455,7 @@ WITH
     cte2 AS (SELECT cName,SUM(totPopulation) AS popSum,SUM(totDeaths) AS deathSum FROM proStaTer,Country
              WHERE Country.cID = proStaTer.cID
              GROUP BY proStaTer.cID)
-
 SELECT rName, Country.cName,cte2.popSum,cte2.deathSum,SUM(cte1.totalVaccinated) AS totalVaccinatedCountry,SUM(cte1.totalVaccinatedbutDied) AS totalVaccinatedbutDiedCountry FROM Region JOIN Country JOIN proStaTer JOIN cte1 JOIN cte2
 WHERE Region.rID = Country.rID AND Country.cName = cte2.cName AND proStaTer.pstID = cte1.pstID AND proStaTer.cID = Country.cID
 GROUP BY Country.cID
 ORDER BY cte2.deathSum ASC;
-
-
-
