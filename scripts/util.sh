@@ -11,10 +11,12 @@ main() (
     export mysqlhost=mysql-scratch
     export mysqlport=3307
     export auth=scratch
+    export xampphost=xampp-scratch
 
     # Run
     for command in "$@"; do
         case $command in
+            xampp) run_xampp ;;
             connect_mysql) connect_mysql ;;
             c|connect|connect_postgres) connect_postgres ;;
             p|postgres) db_postgres ;;
@@ -90,12 +92,25 @@ db_mysql() {
 
 clean() {
     docker rm -f ${postgreshost}{,_client} ${mysqlhost}{,_client}
+    docker rm -f "$xampphost"
     docker network rm "$auth"
 }
 
 
 network_create() {
     docker network create "$auth"
+}
+
+
+run_xampp() {
+    docker run \
+        --restart unless-stopped \
+        --detach \
+        --name "$xampphost" \
+        --publish 41061:22 \
+        --publish 41062:80 \
+        --mount "type=bind,source=${PWD}/app,target=/www" \
+        tomsik68/xampp:latest
 }
 
 
