@@ -208,9 +208,9 @@ INSERT INTO VaccineCompany (vaccine,pstID) VALUES
   ('Moderna',1),
   ('Johnson & Johnson',1),
   ('AstraZeneca',1),
-  ('Pfizer,',2),
+  ('Pfizer',2),
   ('Moderna',2),
-  ('Johnson & Johnson,',2),
+  ('Johnson & Johnson',2),
   ('AstraZeneca',2),
   ('Pfizer',3),
   ('Moderna,',3),
@@ -262,15 +262,15 @@ INSERT INTO VaccineCompany (vaccine,pstID) VALUES
   ('AstraZeneca',14),
   ('Pfizer',15),
   ('Moderna,',15),
-  ('Johnson & Johnson,',15),
+  ('Johnson & Johnson',15),
   ('AstraZeneca',15),
   ('Pfizer',16),
   ('Moderna',16),
-  ('Johnson & Johnson,',16),
+  ('Johnson & Johnson',16),
   ('AstraZeneca',16),
   ('Pfizer',17),
   ('Moderna',17),
-  ('Johnson & Johnson,',17),
+  ('Johnson & Johnson',17),
   ('AstraZeneca',17),
   ('Pfizer',18),
   ('Moderna',18),
@@ -625,6 +625,20 @@ ORDER BY Emails.timestamp ASC;
  * QUERY 19
  *
  **/
+SELECT
+    VaccineRecords.timestamp AS date,
+    proStaTerRecords.totPopulation AS population,
+    VaccineCompany.vaccine AS vaccine,
+    SUM(VaccineRecords.vacTotal) AS totalVaccinated,
+    SUM(VaccineRecords.vacButInfected) + SUM(proStaTerRecords.infectedNoVaccine) AS totalInfected
+FROM VaccineRecords
+    JOIN proStaTerRecords ON DATE(proStaTerRecords.timestamp) = DATE(VaccineRecords.timestamp)
+    JOIN proStaTer ON proStaTer.pstID = proStaTerRecords.pstID
+    JOIN Country ON proStaTer.cID = Country.cID
+    JOIN VaccineCompany ON VaccineCompany.compID = VaccineRecords.compID
+WHERE LOWER(Country.cName) = 'canada'
+GROUP BY date, population, vaccine
+ORDER BY date DESC;
 
 
 /*
