@@ -549,12 +549,24 @@ INSERT INTO VaccineRecords (compID,vacButInfected,vacButDied,vacTotal,timestamp)
  * QUERY 10
  *
  **/
-SELECT uType AS role, IFNULL(username, 'NONE'), fName AS firstName, lName AS lastName, cName AS citizenship, email, phoneNum
-FROM Users u, (SELECT u.uID, username
-	  FROM Users u LEFT JOIN specialUser su
-	  ON u.uID = su.uID) AS allUsers,
-proStaTer pst, Country c
-WHERE u.uID = allUsers.uID AND u.pstID = pst.pstID AND pst.cID = c.cID
+SELECT uType AS role,
+    IFNULL(username, 'NONE'),
+    fName AS firstName,
+    lName AS lastName,
+    cName AS citizenship,
+    email,
+    phoneNum
+FROM Users u,
+    (
+        SELECT u.uID, username
+        FROM Users u
+        LEFT JOIN specialUser su ON u.uID = su.uID
+    ) AS allUsers,
+    proStaTer pst,
+    Country c
+WHERE u.uID = allUsers.uID
+    AND u.pstID = pst.pstID
+    AND pst.cID = c .cID
 ORDER BY role, citizenship ASC;
 
 /*
@@ -562,18 +574,39 @@ ORDER BY role, citizenship ASC;
  *
  **/
 WITH
-cte1 AS
-    (SELECT specialUser.username,Suspension.uID,suspendDate FROM Suspension LEFT JOIN specialUser ON Suspension.uID = specialUser.uID)
-
-SELECT cte1.username,fName,lName,cName,email,phoneNum,cte1.suspendDate FROM cte1,Users,proStaTer,Country
-WHERE Users.uID IN (SELECT uID FROM Suspension) AND Users.pstID = proStaTer.pstID AND proStaTer.cID = Country.cID AND cte1.uID = Users.uID
+    cte1 AS (
+        SELECT specialUser.username,
+            Suspension.uID,
+            suspendDate
+        FROM Suspension
+            LEFT JOIN specialUser ON Suspension.uID = specialUser.uID
+    )
+SELECT cte1.username,
+    fName,
+    lName,
+    cName,
+    email,
+    phoneNum,
+    cte1.suspendDate
+FROM cte1,
+    Users,
+    proStaTer,
+    Country
+WHERE Users.uID IN (
+        SELECT uID
+        FROM Suspension
+    )
+    AND Users.pstID = proStaTer.pstID
+    AND proStaTer.cID = Country.cID
+    AND cte1.uID = Users.uID
 ORDER BY suspendDate;
 
 /*
  * QUERY 14
  *
  **/
-SELECT pubDate,majTopic,minTopic,summary,artTitle FROM Article
+SELECT pubDate, majTopic, minTopic, summary, artTitle
+FROM Article
 WHERE Article.authName = '' #some input
 ORDER BY pubDate;
 
@@ -581,8 +614,16 @@ ORDER BY pubDate;
  * QUERY 15
  *
  **/
-SELECT authName,cName,COUNT(artTitle) AS numOfPublications FROM Article,Users,proStaTer, Country
-WHERE Article.uID = Users.uID AND Users.pstID = proStaTer.pstID AND proStaTer.cID = Country.cID
+SELECT authName,
+    cName,
+    COUNT(artTitle) AS numOfPublications
+FROM Article,
+    Users,
+    proStaTer,
+    Country
+WHERE Article.uID = Users.uID
+    AND Users.pstID = proStaTer.pstID
+    AND proStaTer.cID = Country.cID
 GROUP BY Article.uID
 ORDER BY numOfPublications DESC;
 
@@ -590,9 +631,20 @@ ORDER BY numOfPublications DESC;
  * QUERY 16
  *
  **/
-SELECT rName,cName,COUNT(authName) AS totAuthors,COUNT(artTitle) AS numOfPublications FROM Region,Country,Article, Users, proStaTer
-WHERE Country.rID = Region.rID AND Article.uID = Users.uID AND Users.pstID = proStaTer.pstID and proStaTer.cID = Country.cID
-GROUP BY cName,rName
+SELECT rName,
+    cName,
+    COUNT(authName) AS totAuthors,
+    COUNT(artTitle) AS numOfPublications
+FROM Region,
+    Country,
+    Article,
+    Users,
+    proStaTer
+WHERE Country.rID = Region.rID
+    AND Article.uID = Users.uID
+    AND Users.pstID = proStaTer.pstID
+    and proStaTer.cID = Country.cID
+GROUP BY cName, rName
 ORDER BY rName ASC, numOfPublications DESC;
 
 /*
@@ -600,14 +652,38 @@ ORDER BY rName ASC, numOfPublications DESC;
  *
  **/
 WITH
-    cte1 AS (SELECT pstName,proStaTer.pstID,SUM(vacTotal) AS totalVaccinated,SUM(vacButDied) AS totalVaccinatedbutDied FROM VaccineCompany,proStaTer
-             WHERE proStaTer.pstID = VaccineCompany.pstID
-             GROUP BY proStaTer.pstName),
-    cte2 AS (SELECT cName,SUM(totPopulation) AS popSum,SUM(totDeaths) AS deathSum FROM proStaTer,Country
-             WHERE Country.cID = proStaTer.cID
-             GROUP BY proStaTer.cID)
-SELECT rName, Country.cName,cte2.popSum,cte2.deathSum,SUM(cte1.totalVaccinated) AS totalVaccinatedCountry,SUM(cte1.totalVaccinatedbutDied) AS totalVaccinatedbutDiedCountry FROM Region JOIN Country JOIN proStaTer JOIN cte1 JOIN cte2
-WHERE Region.rID = Country.rID AND Country.cName = cte2.cName AND proStaTer.pstID = cte1.pstID AND proStaTer.cID = Country.cID
+    cte1 AS (
+        SELECT pstName,
+            proStaTer.pstID,
+            SUM(vacTotal) AS totalVaccinated,
+            SUM(vacButDied) AS totalVaccinatedbutDied
+        FROM VaccineCompany, proStaTer
+        WHERE proStaTer.pstID = VaccineCompany.pstID
+        GROUP BY proStaTer.pstName
+    ),
+    cte2 AS (
+        SELECT cName,
+            SUM(totPopulation) AS popSum,
+            SUM(totDeaths) AS deathSum
+        FROM proStaTer, Country
+        WHERE Country.cID = proStaTer.cID
+        GROUP BY proStaTer.cID
+    )
+SELECT rName,
+    Country.cName,
+    cte2.popSum,
+    cte2.deathSum,
+    SUM(cte1.totalVaccinated) AS totalVaccinatedCountry,
+    SUM(cte1.totalVaccinatedbutDied) AS totalVaccinatedbutDiedCountry
+FROM Region
+    JOIN Country
+    JOIN proStaTer
+    JOIN cte1
+    JOIN cte2
+WHERE Region.rID = Country.rID
+    AND Country.cName = cte2.cName
+    AND proStaTer.pstID = cte1.pstID
+    AND proStaTer.cID = Country.cID
 GROUP BY Country.cID
 ORDER BY cte2.deathSum ASC;
 
