@@ -1,0 +1,26 @@
+VaccineRecords(compID, timestamp, vacButDied, vacButInfected, vacTotal)
+FD = {timestamp compID -> vacButDied, timestamp compID -> vacButInfected, timestamp compID -> vacTotal}
+
+VaccineCompany(compID, pstID, vaccine)
+FD = {compID -> vaccine, compID -> pstID}
+
+ProStatTer(pstID, cID, proStaTerName)
+FD = {pstID -> cID, pstID -> proStaTerName}
+
+ProStatTerRecords(pstID, timestamp, totPopulation, totDeaths, infectedNoVaccine)
+FD = {pstID timestamp -> totPopulation, pstID timestamp-> totDeaths, pstID timestamp-> infectedNoVaccine}
+
+EmailRecords(recordID, username, timestamp, subject, body)
+FD = {recordID -> username, recordID -> timestamp, recordID -> subject, recordID -> body}
+
+Country(cID, rID, cName)
+FD = {cID -> rID, cID -> cName}
+
+Region(rID, rName)
+FD = {rID -> rName}
+
+Organization(oID, cID, orgType, orgName)
+FD = {oID -> cID, oID -> orgType, oID -> orgName}
+
+Article(aID, artTitle, uID, authName, summary, minTopic, pubDate, majTopic)
+FD = {aID -> artTitle, aID -> uID, aID -> authName, aID -> summary, aID -> minTopic, aID -> pubDate, aID -> majTopic)
