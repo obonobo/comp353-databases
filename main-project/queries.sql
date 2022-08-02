@@ -458,6 +458,7 @@ INSERT INTO Article (authName, majTopic, minTopic, pubDate, artTitle, summary, u
 
 INSERT INTO proStaTerRecords (pstID, totPopulation, totDeaths, infectedNoVaccine,timestamp) VALUES
 (1, 9928163, 746923, 6993463,'2022-07-20 08:52:27'),
+(1, 9928163, 746923, 6993463, '2022-01-11 08:52:27'),
 (2, 6681963, 546421, 4393421,'2022-01-30 21:33:17'),
 (3, 5024279, 245987, 3194782,'2022-07-19 19:55:27'),
 (4,  39538223, 2228471, 19319392,'2022-06-06 16:28:24'),
@@ -626,20 +627,30 @@ ORDER BY Emails.timestamp ASC;
  *
  **/
 SELECT
-    VaccineRecords.timestamp AS date,
+    DATE(VaccineRecords.timestamp) AS date,
     proStaTerRecords.totPopulation AS population,
     VaccineCompany.vaccine AS vaccine,
     SUM(VaccineRecords.vacTotal) AS totalVaccinated,
     SUM(VaccineRecords.vacButInfected) + SUM(proStaTerRecords.infectedNoVaccine) AS totalInfected
 FROM VaccineRecords
-    JOIN proStaTerRecords ON DATE(proStaTerRecords.timestamp) = DATE(VaccineRecords.timestamp)
-    JOIN proStaTer ON proStaTer.pstID = proStaTerRecords.pstID
-    JOIN Country ON proStaTer.cID = Country.cID
     JOIN VaccineCompany ON VaccineCompany.compID = VaccineRecords.compID
+    JOIN proStaTer ON proStaTer.pstID = VaccineCompany.pstID
+    JOIN Country ON proStaTer.cID = Country.cID
+    LEFT JOIN proStaTerRecords ON (proStaTerRecords.pstID, proStaTerRecords.timestamp) = (
+            -- This subquery retrieves the proStaTerRecord whose date is closest
+            -- to our VaccineRecord.
+            SELECT proStaTerRecords.pstID, proStaTerRecords.timestamp
+            FROM proStaTerRecords
+                JOIN proStaTer ON proStaTer.pstID = proStaTerRecords.pstID
+                JOIN Country AS InnerCountry ON proStaTer.cID = Country.cID
+            WHERE DATE(timestamp) <= DATE(VaccineRecords.timestamp)
+            AND InnerCountry.cID = Country.cID
+            ORDER BY timestamp DESC
+            LIMIT 1
+        )
 WHERE LOWER(Country.cName) = 'canada'
 GROUP BY date, population, vaccine
 ORDER BY date DESC;
-
 
 /*
  * QUERY 20

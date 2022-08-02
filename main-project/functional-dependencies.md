@@ -1,7 +1,7 @@
 # Functional Dependencies
 
 User(uID, fName, lName, uType, phoneNum, email, pstID)
-F = { uID -> fName lName uType phoneNum email pstID }
+FD = { uID -> fName lName uType phoneNum email pstID }
 
 SpecialUser(uID, username, password)
 FD = { uID -> username password }
