@@ -706,8 +706,8 @@ SELECT
     DATE(VaccineRecords.timestamp) AS date,
     proStaTerRecords.totPopulation AS population,
     VaccineCompany.vaccine AS vaccine,
-    SUM(VaccineRecords.vacTotal) AS totalVaccinated,
-    SUM(VaccineRecords.vacButInfected) + SUM(proStaTerRecords.infectedNoVaccine) AS totalInfected
+    SUM(vacTotal) AS totalVaccinated,
+    SUM(vacButInfected) + SUM(infectedNoVaccine) AS totalInfected
 FROM VaccineRecords
     JOIN VaccineCompany ON VaccineCompany.compID = VaccineRecords.compID
     JOIN proStaTer ON proStaTer.pstID = VaccineCompany.pstID
@@ -731,4 +731,17 @@ ORDER BY date DESC;
 /*
  * QUERY 20
  *
+ * NOTE: this query retrieves the top 10 authors
  **/
+SELECT
+    CONCAT(Users.fName, ' ', Users.lName) AS author,
+    Country.cName AS citizenship,
+    COUNT(EmailRegistration.username) AS subscriberCount
+FROM EmailRegistration
+    JOIN specialUser ON specialUser.username = EmailRegistration.author
+    JOIN Users ON Users.uID = specialUser.uID
+    JOIN proStaTer ON proStaTer.pstID = Users.pstID
+    JOIN Country ON Country.cID = proStaTer.cID
+GROUP BY author
+ORDER BY subscriberCount DESC
+LIMIT 10;
