@@ -50,10 +50,10 @@ CREATE TABLE Users (
 );
 
 CREATE TABLE specialUser(
-  uID INTEGER,
-  username VARCHAR(50) UNIQUE NOT NULL,
-  password VARCHAR(50),
-  FOREIGN KEY (uID) REFERENCES Users(uID)
+    uID INTEGER,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(50),
+    FOREIGN KEY (uID) REFERENCES Users(uID)
 );
 
 CREATE TABLE Article (
@@ -719,8 +719,8 @@ FROM VaccineRecords
             FROM proStaTerRecords
                 JOIN proStaTer ON proStaTer.pstID = proStaTerRecords.pstID
                 JOIN Country AS InnerCountry ON proStaTer.cID = Country.cID
-            WHERE DATE(timestamp) <= DATE(VaccineRecords.timestamp)
-            AND InnerCountry.cID = Country.cID
+            WHERE InnerCountry.cID = Country.cID
+            AND DATE(timestamp) <= DATE(VaccineRecords.timestamp)
             ORDER BY timestamp DESC
             LIMIT 1
         )
@@ -742,6 +742,6 @@ FROM EmailRegistration
     JOIN Users ON Users.uID = specialUser.uID
     JOIN proStaTer ON proStaTer.pstID = Users.pstID
     JOIN Country ON Country.cID = proStaTer.cID
-GROUP BY author
+GROUP BY EmailRegistration.author
 ORDER BY subscriberCount DESC
 LIMIT 10;
