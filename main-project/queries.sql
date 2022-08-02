@@ -1,5 +1,4 @@
 -- ******* CREATE TABLE STATEMENTS *******
-
 CREATE TABLE Region (
    rID INTEGER AUTO_INCREMENT PRIMARY KEY,
    rName VARCHAR(255)
@@ -50,6 +49,13 @@ CREATE TABLE Users (
     FOREIGN KEY (pstID) REFERENCES proStaTer(pstID)
 );
 
+CREATE TABLE specialUser(
+  uID INTEGER,
+  username VARCHAR(50) UNIQUE NOT NULL,
+  password VARCHAR(50),
+  FOREIGN KEY (uID) REFERENCES Users(uID)
+);
+
 CREATE TABLE Article (
     aID INTEGER AUTO_INCREMENT PRIMARY KEY,
     authName VARCHAR(255),
@@ -59,14 +65,8 @@ CREATE TABLE Article (
     artTitle VARCHAR(255),
     summary VARCHAR(100),
     uID INTEGER,
-    FOREIGN KEY (uID) REFERENCES Users(uID)
-);
-
-CREATE TABLE specialUser(
-  uID INTEGER,
-  username VARCHAR(50),
-  password VARCHAR(50),
-  FOREIGN KEY (uID) REFERENCES Users(uID)
+    FOREIGN KEY (uID) REFERENCES Users(uID),
+    FOREIGN KEY (authName) REFERENCES specialUser(username)
 );
 
 CREATE TABLE Researcher (
@@ -114,9 +114,46 @@ CREATE TABLE Suspension (
     FOREIGN KEY (uID) REFERENCES Users(uID)
 );
 
+CREATE TABLE Emails(
+    emailID INTEGER AUTO_INCREMENT PRIMARY KEY,
+    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+    username VARCHAR(50),
+    subject VARCHAR(8000),
+    body LONGTEXT,
+    FOREIGN KEY (username) REFERENCES specialUser(username)
+);
+
+CREATE TABLE EmailRegistration(
+    username VARCHAR(50),
+    author VARCHAR(50),
+    PRIMARY KEY (username, author),
+    FOREIGN KEY (username) REFERENCES specialUser(username),
+    FOREIGN KEY (author) REFERENCES specialUser(username)
+);
+
+-- Below may be required for trigger creating permissions in MySQL. Run as admin.
+SET GLOBAL log_bin_trust_function_creators=1;
+
+CREATE TRIGGER InsertArticleSendEmailToSubcribers
+AFTER INSERT ON Article FOR EACH ROW
+INSERT INTO Emails(username, subject, body)
+SELECT
+    Subscribers.username,
+    CONCAT(
+        NEW.authName,
+        ' has published a new article called "',
+        NEW.artTitle,
+        '"'
+    ) AS subject,
+    NEW.summary AS body
+FROM (
+    SELECT username
+    FROM EmailRegistration
+    WHERE author = NEW.authName
+) AS Subscribers;
+
 
 -- ******* INSERT STATEMENTS *******
-
 INSERT INTO Region (rName) VALUES
 ('Africa'),
 ('Americas'),
@@ -137,109 +174,109 @@ INSERT INTO Country (cName, rID) VALUES
 ('USA', 2),
 ('Canada', 2);
 
-INSERT INTO proStaTer (cID, pstName, totPopulation, totDeaths, infectedNoVaccine) VALUES
-(10, 'Quebec', 9928163, 746923, 6993463),
-(10, 'British-Columbia', 6681963, 546421, 4393421),
-(9, 'Alabama', 5024279, 245987, 3194782),
-(9, 'California', 39538223, 2228471, 19319392),
-(8, 'Savannakhet', 969697, 198283, 402890),
-(8, 'Vientiane', 820940, 168482, 392089),
-(7, 'Bangkok', 5666264, 969185, 2289161),
-(7, 'Chiang', 1779254, 168482, 392089),
-(6, 'Taiwan', 23162123, 2177265, 10392746),
-(6, 'Beijing', 21893095, 2028996, 9323060),
-(5, 'Accra', 5455692, 617765, 1939244),
-(5, 'Ashanti', 5440463, 415899, 1790242),
-(4, 'Kinshasa', 11575000, 241777, 3936976),
-(4, 'Kwilu', 5174718, 125198, 3790288),
-(3, 'Lazio', 5715190, 541247, 1945722),
-(3, 'Sicily', 4801468, 185273, 279181),
-(2, 'Cairo', 9788739, 949165, 6992872),
-(2, 'Giza', 8915164, 8188764, 5991771),
-(1, 'Jerusalem', 1133700, 91288, 694572),
-(1, 'Haifa', 1032800, 85271, 679111);
+INSERT INTO proStaTer (cID, pstName) VALUES
+(10, 'Quebec'),
+(10, 'British-Columbia'),
+(9, 'Alabama'),
+(9, 'California'),
+(8, 'Savannakhet'),
+(8, 'Vientiane'),
+(7, 'Bangkok'),
+(7, 'Chiang'),
+(6, 'Taiwan'),
+(6, 'Beijing'),
+(5, 'Accra'),
+(5, 'Ashanti'),
+(4, 'Kinshasa'),
+(4, 'Kwilu'),
+(3, 'Lazio'),
+(3, 'Sicily'),
+(2, 'Cairo'),
+(2, 'Giza'),
+(1, 'Jerusalem'),
+(1, 'Haifa');
 
 INSERT INTO VaccineCompany (vaccine,vacButInfected,vacButDied,vacTotal,pstID) VALUES
-  ('Pfizer',522994,1429739,348743,1),
-  ('Moderna',1620040,1078552,993868,1),
-  ('Johnson & Johnson',1567742,459720,242528,1),
-  ('AstraZeneca',1009160,1622276,1295398,1),
-  ('Pfizer,',640631,726867,433468,2),
-  ('Moderna',249661,1630160,661427,2),
-  ('Johnson & Johnson,',1035382,879563,1227011,2),
-  ('AstraZeneca',585267,1866934,1621834,2),
-  ('Pfizer',897037,1849240,766891,3),
-  ('Moderna,',579130,1792051,984679,3),
-  ('Johnson & Johnson.',384069,1044384,1550032,3),
-  ('AstraZeneca.',1909337,1169881,215257,3),
-  ('Pfizer',633901,262048,809423,4),
-  ('Moderna',481325,1894940,296600,4),
-  ('Johnson & Johnson',997572,1230250,1148905,4),
-  ('AstraZeneca',547307,699185,626700,4),
-  ('Pfizer',540014,236905,542187,5),
-  ('Moderna',709580,1293306,753599,5),
-  ('Johnson & Johnson',687391,296505,209229,5),
-  ('AstraZeneca',1855054,831250,430262,5),
-  ('Pfizer',431538,1189629,224066,6),
-  ('Moderna.',1023754,612867,512636,6),
-  ('Johnson & Johnson',1842005,1216407,842949,6),
-  ('AstraZeneca',1573215,1036517,1838283,6),
-  ('Pfizer',1160465,1789125,546933,7),
-  ('Moderna.',1897194,542240,1600158,7),
-  ('Johnson & Johnson',1325145,1754016,519040,7),
-  ('AstraZeneca',1095319,309104,254387,7),
-  ('Pfizer.',1022378,927619,870982,8),
-  ('Moderna',1433970,818535,1750973,8),
-  ('Johnson & Johnson',1967362,1903656,1626347,8),
-  ('AstraZeneca,',1581830,1455110,915999,8),
-  ('Pfizer,',1444195,675418,1866468,9),
-  ('Moderna',1726475,1861643,553328,9),
-  ('Johnson & Johnson',1028476,1811436,356848,9),
-  ('AstraZeneca',378382,1389130,1294324,9),
-  ('Pfizer,',714977,1515112,694610,10),
-  ('Moderna',307167,1194066,357878,10),
-  ('Johnson & Johnson.',1204100,858369,521114,10),
-  ('AstraZeneca',418102,368332,1984770,10),
-  ('Pfizer',1267328,368596,213240,11),
-  ('Moderna,',1197513,1865510,1190970,11),
-  ('Johnson & Johnson.',500839,1473635,1264030,11),
-  ('AstraZeneca',1532228,503946,1984217,11),
-  ('Pfizer',1765211,971618,738209,12),
-  ('Moderna.',1054987,1184689,1200467,12),
-  ('Johnson & Johnson',392070,1186012,854503,12),
-  ('AstraZeneca',1429561,1173435,337566,12),
-  ('Pfizer.',599958,280015,901943,13),
-  ('Moderna,',1447808,1161188,1472250,13),
-  ('Johnson & Johnson',1781490,1535208,1994431,13),
-  ('AstraZeneca',519036,1134001,1340917,13),
-  ('Pfizer',994424,583520,708162,14),
-  ('Moderna.',1128980,1700886,985507,14),
-  ('Johnson & Johnson',398328,611237,1994077,14),
-  ('AstraZeneca',1768029,1656960,637487,14),
-  ('Pfizer',1492780,1264526,1129131,15),
-  ('Moderna,',990840,1654596,1209653,15),
-  ('Johnson & Johnson,',1050751,949919,1327494,15),
-  ('AstraZeneca',1620613,770109,394023,15),
-  ('Pfizer',1876635,418128,1484099,16),
-  ('Moderna',1666692,1471397,551858,16),
-  ('Johnson & Johnson,',282751,632241,1627519,16),
-  ('AstraZeneca',975826,1237363,1629740,16),
-  ('Pfizer',514149,1534074,393315,17),
-  ('Moderna',1382292,1367098,1971440,17),
-  ('Johnson & Johnson,',1492953,340937,1381065,17),
-  ('AstraZeneca',1199801,1293166,900964,17),
-  ('Pfizer',1023625,1940326,1815832,18),
-  ('Moderna',972596,1378973,896145,18),
-  ('Johnson & Johnson',1001781,1780548,922049,18),
-  ('AstraZeneca',391247,780338,415834,18),
-  ('Pfizer',1719852,1646945,1704895,19),
-  ('Moderna,',810242,1389822,885228,19),
-  ('Johnson & Johnson',1123145,992845,493652,19),
-  ('AstraZeneca.',1767695,1247462,1013107,19),
-  ('Pfizer',1919721,1416932,936995,20),
-  ('Moderna',1486060,1356916,1259874,20),
-  ('Johnson & Johnson',756324,566345,744889,20),
-  ('AstraZeneca',1928391,1630791,710535,20);
+('Pfizer',522994,1429739,348743,1),
+('Moderna',1620040,1078552,993868,1),
+('Johnson & Johnson',1567742,459720,242528,1),
+('AstraZeneca',1009160,1622276,1295398,1),
+('Pfizer,',640631,726867,433468,2),
+('Moderna',249661,1630160,661427,2),
+('Johnson & Johnson,',1035382,879563,1227011,2),
+('AstraZeneca',585267,1866934,1621834,2),
+('Pfizer',897037,1849240,766891,3),
+('Moderna,',579130,1792051,984679,3),
+('Johnson & Johnson.',384069,1044384,1550032,3),
+('AstraZeneca.',1909337,1169881,215257,3),
+('Pfizer',633901,262048,809423,4),
+('Moderna',481325,1894940,296600,4),
+('Johnson & Johnson',997572,1230250,1148905,4),
+('AstraZeneca',547307,699185,626700,4),
+('Pfizer',540014,236905,542187,5),
+('Moderna',709580,1293306,753599,5),
+('Johnson & Johnson',687391,296505,209229,5),
+('AstraZeneca',1855054,831250,430262,5),
+('Pfizer',431538,1189629,224066,6),
+('Moderna.',1023754,612867,512636,6),
+('Johnson & Johnson',1842005,1216407,842949,6),
+('AstraZeneca',1573215,1036517,1838283,6),
+('Pfizer',1160465,1789125,546933,7),
+('Moderna.',1897194,542240,1600158,7),
+('Johnson & Johnson',1325145,1754016,519040,7),
+('AstraZeneca',1095319,309104,254387,7),
+('Pfizer.',1022378,927619,870982,8),
+('Moderna',1433970,818535,1750973,8),
+('Johnson & Johnson',1967362,1903656,1626347,8),
+('AstraZeneca,',1581830,1455110,915999,8),
+('Pfizer,',1444195,675418,1866468,9),
+('Moderna',1726475,1861643,553328,9),
+('Johnson & Johnson',1028476,1811436,356848,9),
+('AstraZeneca',378382,1389130,1294324,9),
+('Pfizer,',714977,1515112,694610,10),
+('Moderna',307167,1194066,357878,10),
+('Johnson & Johnson.',1204100,858369,521114,10),
+('AstraZeneca',418102,368332,1984770,10),
+('Pfizer',1267328,368596,213240,11),
+('Moderna,',1197513,1865510,1190970,11),
+('Johnson & Johnson.',500839,1473635,1264030,11),
+('AstraZeneca',1532228,503946,1984217,11),
+('Pfizer',1765211,971618,738209,12),
+('Moderna.',1054987,1184689,1200467,12),
+('Johnson & Johnson',392070,1186012,854503,12),
+('AstraZeneca',1429561,1173435,337566,12),
+('Pfizer.',599958,280015,901943,13),
+('Moderna,',1447808,1161188,1472250,13),
+('Johnson & Johnson',1781490,1535208,1994431,13),
+('AstraZeneca',519036,1134001,1340917,13),
+('Pfizer',994424,583520,708162,14),
+('Moderna.',1128980,1700886,985507,14),
+('Johnson & Johnson',398328,611237,1994077,14),
+('AstraZeneca',1768029,1656960,637487,14),
+('Pfizer',1492780,1264526,1129131,15),
+('Moderna,',990840,1654596,1209653,15),
+('Johnson & Johnson,',1050751,949919,1327494,15),
+('AstraZeneca',1620613,770109,394023,15),
+('Pfizer',1876635,418128,1484099,16),
+('Moderna',1666692,1471397,551858,16),
+('Johnson & Johnson,',282751,632241,1627519,16),
+('AstraZeneca',975826,1237363,1629740,16),
+('Pfizer',514149,1534074,393315,17),
+('Moderna',1382292,1367098,1971440,17),
+('Johnson & Johnson,',1492953,340937,1381065,17),
+('AstraZeneca',1199801,1293166,900964,17),
+('Pfizer',1023625,1940326,1815832,18),
+('Moderna',972596,1378973,896145,18),
+('Johnson & Johnson',1001781,1780548,922049,18),
+('AstraZeneca',391247,780338,415834,18),
+('Pfizer',1719852,1646945,1704895,19),
+('Moderna,',810242,1389822,885228,19),
+('Johnson & Johnson',1123145,992845,493652,19),
+('AstraZeneca.',1767695,1247462,1013107,19),
+('Pfizer',1919721,1416932,936995,20),
+('Moderna',1486060,1356916,1259874,20),
+('Johnson & Johnson',756324,566345,744889,20),
+('AstraZeneca',1928391,1630791,710535,20);
 
 INSERT INTO Organization (orgName, orgType, cID) VALUES
 ('At Institute', 'ResearchCenter', 1),
@@ -353,21 +390,26 @@ INSERT INTO Suspension VALUES
 (24,'2020-10-12'),
 (2,'2021-04-6');
 
-INSERT INTO Article
-(authName, majTopic, minTopic, pubDate, artTitle, summary, uID) VALUES
-('Joe Smith', 'Nullam ut', 'varius orci,', '2021-08-27', 'Clear And Unbiased Facts About COVID-19', 'ut nisi a odio semper cursus.', 8),
-('AT Institute', 'vestibulum massa', 'augue eu', '2020-10-03', 'Top 10 Tips To Grow Your COVID-19', 'aliquet molestie tellus. Aenean egestas.', 1),
-('Urna PC', 'velit. Cras', 'pede et', '2021-07-09', 'COVID-19 Made Simple', 'vehicula risus. Nulla eget metus',19),
-('Savannah Warner', 'non enim', 'Ut tincidunt', '2021-04-21', 'How To Use COVID-19 To Desire', 'luctus lobortis. Class aptent taciti sociosqu ad.', 4),
-('Gay Bond', 'non arcu.', 'sit amet', '2019-12-09', '22 Tips To Start Building A COVID-19', 'diam lorem, auctor quis, tristique', 18),
-('Yuli Michael', 'pretium neque.', 'Suspendisse tristique', '2021-04-21', 'How To Win Buyers And Influence Sales with COVID-19', 'Suspendisse sagittis. Nullam vitae diam.', 6),
-('Quentin Clark', 'luctus et', 'Donec est', '2020-11-30', 'Want To Step Up Your COVID-19? You Need To Read This', 'libero lacus, varius', 13),
-('Semper Consulting', 'mauris ut', 'penatibus et', '2020-06-29', 'Take 10 Minutes to Get Started With COVID-19', 'Aliquam ultrices iaculis odio. Nam', 29),
-('Nulla Foundation', 'vitae odio', 'tincidunt, nunc', '2019-11-20', '7 Rules About COVID-19 Meant To Be Broken', 'eu metus. In lorem. Donec elementum, lorem ut aliquam.', 16),
-('Norman Tran', 'Fusce dolor', 'Cras eu', '2020-03-20', 'The Death Of COVID-19 And How To Avoid It', 'Sed nec', 17),
-('Joe Smith', 'ligula. Donec', 'magna tellus', '2021-12-03', 'Your Key To Success: COVID-19', 'convallis est, vitae.', 8),
-('Joe Smith', 'defef', 'carta nf', '2021-12-12', 'Your COVID-19', 'convolu', 8),
-('Quentin Clark', 'wer', 'estes', '2020-11-17', 'You Need To Read This', 'libero lacus, varius',13);
+INSERT INTO EmailRegistration VALUES
+('freddster', 'freddster'),
+('zeddphyrus', 'freddster'),
+('theQman', 'freddster'),
+('norm', 'wizard');
+
+INSERT INTO Article(authName, majTopic, minTopic, pubDate, artTitle, summary, uID) VALUES
+('freddster', 'Nullam ut', 'varius orci,', '2021-08-27', 'Clear And Unbiased Facts About COVID-19', 'ut nisi a odio semper cursus.', 8),
+('freddster', 'vestibulum massa', 'augue eu', '2020-10-03', 'Top 10 Tips To Grow Your COVID-19', 'aliquet molestie tellus. Aenean egestas.', 1),
+('freddster', 'velit. Cras', 'pede et', '2021-07-09', 'COVID-19 Made Simple', 'vehicula risus. Nulla eget metus',19),
+('freddster', 'non enim', 'Ut tincidunt', '2021-04-21', 'How To Use COVID-19 To Desire', 'luctus lobortis. Class aptent taciti sociosqu ad.', 4),
+('freddster', 'non arcu.', 'sit amet', '2019-12-09', '22 Tips To Start Building A COVID-19', 'diam lorem, auctor quis, tristique', 18),
+('freddster', 'pretium neque.', 'Suspendisse tristique', '2021-04-21', 'How To Win Buyers And Influence Sales with COVID-19', 'Suspendisse sagittis. Nullam vitae diam.', 6),
+('freddster', 'luctus et', 'Donec est', '2020-11-30', 'Want To Step Up Your COVID-19? You Need To Read This', 'libero lacus, varius', 13),
+('freddster', 'mauris ut', 'penatibus et', '2020-06-29', 'Take 10 Minutes to Get Started With COVID-19', 'Aliquam ultrices iaculis odio. Nam', 29),
+('freddster', 'vitae odio', 'tincidunt, nunc', '2019-11-20', '7 Rules About COVID-19 Meant To Be Broken', 'eu metus. In lorem. Donec elementum, lorem ut aliquam.', 16),
+('freddster', 'Fusce dolor', 'Cras eu', '2020-03-20', 'The Death Of COVID-19 And How To Avoid It', 'Sed nec', 17),
+('wizard', 'ligula. Donec', 'magna tellus', '2021-12-03', 'Your Key To Success: COVID-19', 'convallis est, vitae.', 8),
+('freddster', 'defef', 'carta nf', '2021-12-12', 'Your COVID-19', 'convolu', 8),
+('freddster', 'wer', 'estes', '2020-11-17', 'You Need To Read This', 'libero lacus, varius',13);
 
 INSERT INTO proStaTerRecords (pstID, totPopulation, totDeaths, infectedNoVaccine,timestamp) VALUES
 (1, 9928163, 746923, 6993463,'2022-07-20 08:52:27'),

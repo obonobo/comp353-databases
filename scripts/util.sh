@@ -44,6 +44,19 @@ connect_postgres() {
 
 
 connect_mysql() {
+    # docker run \
+    #     --rm \
+    #     --name "${mysqlhost}_client" \
+    #     --interactive \
+    #     --tty \
+    #     --network "$auth" \
+    #     mysql mysql \
+    #         --host="$mysqlhost" \
+    #         --database="$auth" \
+    #         --user="$auth" \
+    #         --password="$auth"
+
+    # Below connects via root account
     docker run \
         --rm \
         --name "${mysqlhost}_client" \
@@ -53,7 +66,7 @@ connect_mysql() {
         mysql mysql \
             --host="$mysqlhost" \
             --database="$auth" \
-            --user="$auth" \
+            --user="root" \
             --password="$auth"
 }
 
