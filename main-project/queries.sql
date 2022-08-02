@@ -124,9 +124,9 @@ CREATE TABLE Suspension (
 CREATE TABLE Emails(
     emailID INTEGER AUTO_INCREMENT PRIMARY KEY,
     timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
-    username VARCHAR(50),
-    subject VARCHAR(8000),
-    body LONGTEXT,
+    username VARCHAR(50) NOT NULL,
+    subject VARCHAR(8000) NOT NULL DEFAULT '',
+    body LONGTEXT NOT NULL DEFAULT (''),
     FOREIGN KEY (username) REFERENCES specialUser(username)
 );
 
@@ -330,7 +330,22 @@ INSERT INTO Users (fName, lName, dateOfBirth, phoneNum, email, uType, pstID) VAL
 ('Preston','Torres','2022-04-20','(682) 575-7220','ligulaqua@outlook.org', 'administrator', 13),
 ('Zeus','Hendrix','2023-06-29','(719) 857-1378','pedelosa@outlook.edu', 'researcher', 12),
 ('Amena','Nash','2023-01-18','(687) 164-0971','orciini@outlook.couk', 'orgDelegate', 12),
-('Joelle','Davidson','2023-04-25','(694) 126-1646','telldisse@protonmail.com', 'researcher', 20);
+('Joelle','Davidson','2023-04-25','(694) 126-1646','telldisse@protonmail.com', 'researcher', 20),
+('Amena','Nash','2023-01-18','(687) 164-0971','orciini@outlook.couk', 'orgDelegate', 12),
+('Amena','Nash','2023-01-18','(687) 164-0971','orciini@outlook.couk', 'orgDelegate', 12),
+('Amena','Nash','2023-01-18','(687) 164-0971','orciini@outlook.couk', 'orgDelegate', 12),
+('Amena','Nash','2023-01-18','(687) 164-0971','orciini@outlook.couk', 'orgDelegate', 12),
+('Amena','Nash','2023-01-18','(687) 164-0971','orciini@outlook.couk', 'orgDelegate', 12),
+('Amena','Nash','2023-01-18','(687) 164-0971','orciini@outlook.couk', 'orgDelegate', 12),
+('Amena','Nash','2023-01-18','(687) 164-0971','orciini@outlook.couk', 'orgDelegate', 12),
+('Amena','Nash','2023-01-18','(687) 164-0971','orciini@outlook.couk', 'orgDelegate', 12),
+('Amena','Nash','2023-01-18','(687) 164-0971','orciini@outlook.couk', 'orgDelegate', 12),
+('Amena','Nash','2023-01-18','(687) 164-0971','orciini@outlook.couk', 'orgDelegate', 12),
+('Amena','Nash','2023-01-18','(687) 164-0971','orciini@outlook.couk', 'orgDelegate', 12),
+('Amena','Nash','2023-01-18','(687) 164-0971','orciini@outlook.couk', 'orgDelegate', 12),
+('Amena','Nash','2023-01-18','(687) 164-0971','orciini@outlook.couk', 'orgDelegate', 12),
+('Amena','Nash','2023-01-18','(687) 164-0971','orciini@outlook.couk', 'orgDelegate', 12),
+('Amena','Nash','2023-01-18','(687) 164-0971','orciini@outlook.couk', 'orgDelegate', 12);
 
 INSERT INTO specialUser (uID, username, password) VALUES
 (1, 'freddster', 'ksjdfh234'),
@@ -358,7 +373,17 @@ INSERT INTO specialUser (uID, username, password) VALUES
 (27, 'elpres', 'torres_87'),
 (28, 'almightyzeus', 'hendrix_64'),
 (29, 'amenita', 'nashynash1000'),
-(30, 'jojo111', 'jld1995');
+(30, 'jojo111', 'jld1995'),
+(31, 'Joe Smith', 'password123'),
+(32, 'AT Institute', 'password123'),
+(33, 'Urna PC', 'password123'),
+(34, 'Savannah Warner', 'password123'),
+(35, 'Gay Bond', 'password123'),
+(36, 'Yuli Michael', 'password123'),
+(37, 'Quentin Clark', 'password123'),
+(38, 'Semper Consulting', 'password123'),
+(39, 'Nulla Foundation', 'password123'),
+(40, 'Norman Tran', 'password123');
 
 INSERT INTO Admin (uID) VALUES
 (3),
@@ -416,7 +441,20 @@ INSERT INTO Article (authName, majTopic, minTopic, pubDate, artTitle, summary, u
 ('Norman Tran', 'Fusce dolor', 'Cras eu', '2020-03-20', 'The Death Of COVID-19 And How To Avoid It', 'Sed nec', 17),
 ('Joe Smith', 'ligula. Donec', 'magna tellus', '2021-12-03', 'Your Key To Success: COVID-19', 'convallis est, vitae.', 8),
 ('Joe Smith', 'defef', 'carta nf', '2021-12-12', 'Your COVID-19', 'convolu', 8),
-('Quentin Clark', 'wer', 'estes', '2020-11-17', 'You Need To Read This', 'libero lacus, varius',13);
+('Quentin Clark', 'wer', 'estes', '2020-11-17', 'You Need To Read This', 'libero lacus, varius',13),
+('freddster', 'Nullam ut', 'varius orci,', '2021-08-27', 'Clear And Unbiased Facts About COVID-19', 'ut nisi a odio semper cursus.', 8),
+('freddster', 'vestibulum massa', 'augue eu', '2020-10-03', 'Top 10 Tips To Grow Your COVID-19', 'aliquet molestie tellus. Aenean egestas.', 1),
+('freddster', 'velit. Cras', 'pede et', '2021-07-09', 'COVID-19 Made Simple', 'vehicula risus. Nulla eget metus',19),
+('freddster', 'non enim', 'Ut tincidunt', '2021-04-21', 'How To Use COVID-19 To Desire', 'luctus lobortis. Class aptent taciti sociosqu ad.', 4),
+('freddster', 'non arcu.', 'sit amet', '2019-12-09', '22 Tips To Start Building A COVID-19', 'diam lorem, auctor quis, tristique', 18),
+('freddster', 'pretium neque.', 'Suspendisse tristique', '2021-04-21', 'How To Win Buyers And Influence Sales with COVID-19', 'Suspendisse sagittis. Nullam vitae diam.', 6),
+('freddster', 'luctus et', 'Donec est', '2020-11-30', 'Want To Step Up Your COVID-19? You Need To Read This', 'libero lacus, varius', 13),
+('freddster', 'mauris ut', 'penatibus et', '2020-06-29', 'Take 10 Minutes to Get Started With COVID-19', 'Aliquam ultrices iaculis odio. Nam', 29),
+('freddster', 'vitae odio', 'tincidunt, nunc', '2019-11-20', '7 Rules About COVID-19 Meant To Be Broken', 'eu metus. In lorem. Donec elementum, lorem ut aliquam.', 16),
+('freddster', 'Fusce dolor', 'Cras eu', '2020-03-20', 'The Death Of COVID-19 And How To Avoid It', 'Sed nec', 17),
+('freddster', 'ligula. Donec', 'magna tellus', '2021-12-03', 'Your Key To Success: COVID-19', 'convallis est, vitae.', 8),
+('freddster', 'defef', 'carta nf', '2021-12-12', 'Your COVID-19', 'convolu', 8),
+('wizard', 'wer', 'estes', '2020-11-17', 'You Need To Read This', 'libero lacus, varius',13);
 
 INSERT INTO proStaTerRecords (pstID, totPopulation, totDeaths, infectedNoVaccine,timestamp) VALUES
 (1, 9928163, 746923, 6993463,'2022-07-20 08:52:27'),
@@ -503,12 +541,7 @@ INSERT INTO VaccineRecords (compID,vacButInfected,vacButDied,vacTotal,timestamp)
   (60,1486060,1356916,1259874,'2022-02-23 15:20:13'),
   (61,756324,566345,744889,'2022-02-23 15:20:13'),
   (62,1928391,1630791,710535,'2022-02-23 15:20:13');
-  
-INSERT INTO Suspension VALUES
-(14,'2020-08-10'),
-(24,'2020-10-12')
-(2,'2021-04-6');
-  
+
 -- ******* QUERIES *******
 
 /*
@@ -576,3 +609,25 @@ SELECT rName, Country.cName,cte2.popSum,cte2.deathSum,SUM(cte1.totalVaccinated) 
 WHERE Region.rID = Country.rID AND Country.cName = cte2.cName AND proStaTer.pstID = cte1.pstID AND proStaTer.cID = Country.cID
 GROUP BY Country.cID
 ORDER BY cte2.deathSum ASC;
+
+/*
+ * QUERY 18
+ *
+ **/
+SELECT Emails.timestamp, Users.email, Emails.subject
+FROM Emails
+    JOIN specialUser ON Emails.username = specialUser.username
+    JOIN Users ON Users.uID = specialUser.uID
+WHERE EXTRACT(YEAR FROM Emails.timestamp) = 2022
+ORDER BY Emails.timestamp ASC;
+
+/*
+ * QUERY 19
+ *
+ **/
+
+
+/*
+ * QUERY 20
+ *
+ **/
