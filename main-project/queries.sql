@@ -1,3 +1,5 @@
+-- ******* CREATE TABLE STATEMENTS *******
+
 CREATE TABLE Region (
    rID INTEGER AUTO_INCREMENT PRIMARY KEY,
    rName VARCHAR(255)
@@ -114,8 +116,303 @@ CREATE TABLE Suspension (
 );
 
 
+-- ******* INSERT STATEMENTS *******
 
-# query 13
+INSERT INTO Region (rName) VALUES
+('Africa'),
+('Americas'),
+('Eastern Mediterranean'),
+('Europe'),
+('South-East Asia'),
+('Western Pacific');
+
+INSERT INTO Country (cName, rID) VALUES
+('Israel', 3),
+('Egypt', 3),
+('Italy', 4),
+('Congo', 1),
+('Ghana', 1),
+('China', 6),
+('Thailand', 5),
+('Laos', 5),
+('USA', 2),
+('Canada', 2);
+ 
+INSERT INTO proStaTer (cID, pstName, totPopulation, totDeaths, infectedNoVaccine) VALUES
+(10, 'Quebec', 9928163, 746923, 6993463),
+(10, 'British-Columbia', 6681963, 546421, 4393421),
+(9, 'Alabama', 5024279, 245987, 3194782),
+(9, 'California', 39538223, 2228471, 19319392),
+(8, 'Savannakhet', 969697, 198283, 402890),
+(8, 'Vientiane', 820940, 168482, 392089),
+(7, 'Bangkok', 5666264, 969185, 2289161),
+(7, 'Chiang', 1779254, 168482, 392089),
+(6, 'Taiwan', 23162123, 2177265, 10392746),
+(6, 'Beijing', 21893095, 2028996, 9323060),
+(5, 'Accra', 5455692, 617765, 1939244),
+(5, 'Ashanti', 5440463, 415899, 1790242),
+(4, 'Kinshasa', 11575000, 241777, 3936976),
+(4, 'Kwilu', 5174718, 125198, 3790288),
+(3, 'Lazio', 5715190, 541247, 1945722),
+(3, 'Sicily', 4801468, 185273, 279181),
+(2, 'Cairo', 9788739, 949165, 6992872),
+(2, 'Giza', 8915164, 8188764, 5991771),
+(1, 'Jerusalem', 1133700, 91288, 694572),
+(1, 'Haifa', 1032800, 85271, 679111);
+
+INSERT INTO VaccineCompany (vaccine,vacButInfected,vacButDied,vacTotal,pstID) VALUES
+  ('Pfizer',522994,1429739,348743,1),
+  ('Moderna',1620040,1078552,993868,1),
+  ('Johnson & Johnson',1567742,459720,242528,1),
+  ('AstraZeneca',1009160,1622276,1295398,1),
+  ('Pfizer,',640631,726867,433468,2),
+  ('Moderna',249661,1630160,661427,2),
+  ('Johnson & Johnson,',1035382,879563,1227011,2),
+  ('AstraZeneca',585267,1866934,1621834,2),
+  ('Pfizer',897037,1849240,766891,3),
+  ('Moderna,',579130,1792051,984679,3),
+  ('Johnson & Johnson.',384069,1044384,1550032,3),
+  ('AstraZeneca.',1909337,1169881,215257,3),
+  ('Pfizer',633901,262048,809423,4),
+  ('Moderna',481325,1894940,296600,4),
+  ('Johnson & Johnson',997572,1230250,1148905,4),
+  ('AstraZeneca',547307,699185,626700,4),
+  ('Pfizer',540014,236905,542187,5),
+  ('Moderna',709580,1293306,753599,5),
+  ('Johnson & Johnson',687391,296505,209229,5),
+  ('AstraZeneca',1855054,831250,430262,5),
+  ('Pfizer',431538,1189629,224066,6),
+  ('Moderna.',1023754,612867,512636,6),
+  ('Johnson & Johnson',1842005,1216407,842949,6),
+  ('AstraZeneca',1573215,1036517,1838283,6),
+  ('Pfizer',1160465,1789125,546933,7),
+  ('Moderna.',1897194,542240,1600158,7),
+  ('Johnson & Johnson',1325145,1754016,519040,7),
+  ('AstraZeneca',1095319,309104,254387,7),
+  ('Pfizer.',1022378,927619,870982,8),
+  ('Moderna',1433970,818535,1750973,8),
+  ('Johnson & Johnson',1967362,1903656,1626347,8),
+  ('AstraZeneca,',1581830,1455110,915999,8),
+  ('Pfizer,',1444195,675418,1866468,9),
+  ('Moderna',1726475,1861643,553328,9),
+  ('Johnson & Johnson',1028476,1811436,356848,9),
+  ('AstraZeneca',378382,1389130,1294324,9),
+  ('Pfizer,',714977,1515112,694610,10),
+  ('Moderna',307167,1194066,357878,10),
+  ('Johnson & Johnson.',1204100,858369,521114,10),
+  ('AstraZeneca',418102,368332,1984770,10),
+  ('Pfizer',1267328,368596,213240,11),
+  ('Moderna,',1197513,1865510,1190970,11),
+  ('Johnson & Johnson.',500839,1473635,1264030,11),
+  ('AstraZeneca',1532228,503946,1984217,11),
+  ('Pfizer',1765211,971618,738209,12),
+  ('Moderna.',1054987,1184689,1200467,12),
+  ('Johnson & Johnson',392070,1186012,854503,12),
+  ('AstraZeneca',1429561,1173435,337566,12),
+  ('Pfizer.',599958,280015,901943,13),
+  ('Moderna,',1447808,1161188,1472250,13),
+  ('Johnson & Johnson',1781490,1535208,1994431,13),
+  ('AstraZeneca',519036,1134001,1340917,13),
+  ('Pfizer',994424,583520,708162,14),
+  ('Moderna.',1128980,1700886,985507,14),
+  ('Johnson & Johnson',398328,611237,1994077,14),
+  ('AstraZeneca',1768029,1656960,637487,14),
+  ('Pfizer',1492780,1264526,1129131,15),
+  ('Moderna,',990840,1654596,1209653,15),
+  ('Johnson & Johnson,',1050751,949919,1327494,15),
+  ('AstraZeneca',1620613,770109,394023,15),
+  ('Pfizer',1876635,418128,1484099,16),
+  ('Moderna',1666692,1471397,551858,16),
+  ('Johnson & Johnson,',282751,632241,1627519,16),
+  ('AstraZeneca',975826,1237363,1629740,16),
+  ('Pfizer',514149,1534074,393315,17),
+  ('Moderna',1382292,1367098,1971440,17),
+  ('Johnson & Johnson,',1492953,340937,1381065,17),
+  ('AstraZeneca',1199801,1293166,900964,17),
+  ('Pfizer',1023625,1940326,1815832,18),
+  ('Moderna',972596,1378973,896145,18),
+  ('Johnson & Johnson',1001781,1780548,922049,18),
+  ('AstraZeneca',391247,780338,415834,18),
+  ('Pfizer',1719852,1646945,1704895,19),
+  ('Moderna,',810242,1389822,885228,19),
+  ('Johnson & Johnson',1123145,992845,493652,19),
+  ('AstraZeneca.',1767695,1247462,1013107,19),
+  ('Pfizer',1919721,1416932,936995,20),
+  ('Moderna',1486060,1356916,1259874,20),
+  ('Johnson & Johnson',756324,566345,744889,20),
+  ('AstraZeneca',1928391,1630791,710535,20);
+ 
+INSERT INTO Organization (orgName, orgType, cID) VALUES
+('At Institute', 'ResearchCenter', 1),
+('Urna PC', 'GovernmentAgency', 2),
+('Nulla Incorporated', 'Company', 6),
+('Non Consulting', 'ResearchCenter', 4),
+('Diam Lorem LLP', 'Company', 5),
+('Semper Consulting', 'ResearchCenter', 6),
+('Nulla Foundation', 'ResearchCenter', 2),
+('Dictum Associates', 'GovernmentAgency', 4),
+('Ultricies Institute', 'GovernmentAgency', 8),
+('Proin LLC', 'Company', 10),
+('ProCabs', 'GovernmentAgency', 3),
+('Sectum SMP', 'ResearchCenter', 9),
+('Doremi Incorporated', 'Company', 7);
+ 
+INSERT INTO Users (fName, lName, dateOfBirth, phoneNum, email, uType, pstID) VALUES
+('Freddie', 'Gibbs', '1964-02-24', '8054561431', 'cras@google.edu', 'orgDelegate', 1),
+('Zeph', 'Hammond', '1974-01-21', '033576118', 'ipsum@google.net', 'researcher', 2),
+('Kyle', 'Reeves', '1984-03-14', '3406971755', 'primis@google.edu', 'administrator', 8),
+('Savannah', 'Warner', '1994-04-12', '2525418619', 'risus@yahoo.edu', 'researcher', 3),
+('Tasha', 'Peck', '1999-12-02', '4462466157', 'ridiculus@aol.com', 'regular', 7),
+('Yuli', 'Michael', '1989-11-29', '4595237640', 'rhoncus@icloud.uk', 'researcher', 6),
+('Thaddeus', 'Potter', '1979-10-12', '6372864424', 'dolor@yahoo.com', 'orgDelegate', 5),
+('Joe', 'Smith', '1969-09-11', '5643563254', 'natoque@google.net', 'researcher', 1),
+('Curran', 'Morse', '1970-05-21', '8033743757', 'consectetuer@aol.io', 'administrator', 10),
+('Riley', 'Mcdowell', '1980-06-01', '2544085654', 'metus@icloud.com', 'orgDelegate', 5),
+('Thaddeus', 'Harrison', '1990-01-24', '4595237640', 'rhonid@icloud.couk', 'researcher', 2),
+('Thaddeus', 'Potter', '1990-07-21', '6372864424', 'dolorio@yahoo.com', 'regular', 7),
+('Quentin', 'Clark', '1988-02-04', '5643563254', 'cum.toque@google.net', 'researcher', 3),
+('Curran', 'Morse', '1978-08-10', '80937436557', 'conseursus@aol.net', 'administrator', 10),
+('Kathleen', 'Lawson', '1999-01-01', '2544085654', 'metusa@icloud.com', 'researcher', 4),
+('Natalie', 'Gilmore', '1981-11-17', '5235544064', 'enim@hotmail.net', 'orgDelegate', 6),
+('Norman', 'Tran', '1977-04-14', '5086210206', 'phasellue@yahoo.couk', 'researcher', 4),
+('Gay', 'Bond', '1996-11-09', '4037399735', 'liberon@outlook.com', 'researcher', 5),
+('Phoebe', 'Russell', '1987-05-28', '4455838614', 'ornaitre@google.net', 'orgDelegate', 2),
+('Christopher', 'Britt', '1990-08-01', '2338892845', 'primitois@protonmail.couk', 'researcher', 5),
+('Breanna','Wise','2022-03-06','(766) 214-8715','colis.in@aol.com', 'researcher', 17),
+('Tanner','Martin','2023-03-02','(365) 396-6683','ut.m@hotmail.ca', 'researcher', 16),
+('Mira','Hawkins','2021-09-04','(253) 534-9492','sodales@outlook.edu', 'orgDelegate', 19),
+('Bo','Cash','2023-03-07','(913) 265-9914','inonec@icloud.org', 'regular',17),
+('Zachery','Saunders','2023-01-25','(746) 159-5316','aliquaulla@aol.ca','administrator', 16),
+('Kirby','Chase','2021-08-21','(730) 736-2743','vel.cons@hotmail.net', 'regular', 17),
+('Preston','Torres','2022-04-20','(682) 575-7220','ligulaqua@outlook.org', 'administrator', 13),
+('Zeus','Hendrix','2023-06-29','(719) 857-1378','pedelosa@outlook.edu', 'researcher', 12),
+('Amena','Nash','2023-01-18','(687) 164-0971','orciini@outlook.couk', 'orgDelegate', 12),
+('Joelle','Davidson','2023-04-25','(694) 126-1646','telldisse@protonmail.com', 'researcher', 20);
+
+INSERT INTO specialUser (uID, username, password) VALUES 
+(1, 'freddster', 'ksjdfh234'),
+(2, 'zeddphyrus', '12893add'),
+(3, 'killarvs', 'kjdfh_28'),
+(4, 'savy892', 'loapa_193ka'),
+(6, 'yuyu1990', 'amnsm1_12'),
+(7, 'wizard', 'hogwarts3892'),
+(8, 'joeblo', 'averagejoes134'),
+(9, 'curan', 'yurr9283'),
+(10, 'rileyyo', 'Yoyo_11'),
+(11, 'thaddawg', 'Blueblue990'),
+(13, 'theQman', 'ilovefball13'),
+(14, 'currymo', 'cm9822'),
+(15, 'katielaww', 'lawgrad2k22'),
+(16, 'natgilly', 'manutd123'),
+(17, 'norm', 'antran77'),
+(18, 'Gay123', 'bond007'),
+(19, 'feebz', 'russ_1987'),
+(20, 'christhebritt', 'gunners_23'),
+(21, 'brebre', 'wisest_1999'),
+(22, 'thetanman', 'tm_1993'),
+(23, 'mirame', 'thehawk_111'),
+(25, 'zachmac', 'saundz_999'),
+(27, 'elpres', 'torres_87'),
+(28, 'almightyzeus', 'hendrix_64'),
+(29, 'amenita', 'nashynash1000'),
+(30, 'jojo111', 'jld1995');
+
+INSERT INTO Admin (uID) VALUES 
+(3),
+(9),
+(14),
+(25),
+(27);
+
+INSERT INTO Researcher (uID) VALUES
+(2),
+(4),
+(6),
+(8),
+(11),
+(13),
+(15),
+(17),
+(18),
+(20),
+(21),
+(22),
+(28),
+(30);
+
+INSERT INTO orgDelagate (uID, oID) VALUES
+(1, 1),
+(7, 4),
+(10, 5),
+(16, 3),
+(19, 2),
+(23, 1),
+(29, 6);
+
+INSERT INTO Suspension VALUES
+(14,'2020-08-10'),
+(24,'2020-10-12'),
+(2,'2021-04-6');
+
+INSERT INTO Article
+(authName, majTopic, minTopic, pubDate, artTitle, summary, uID) VALUES
+('Joe Smith', 'Nullam ut', 'varius orci,', '2021-08-27', 'Clear And Unbiased Facts About COVID-19', 'ut nisi a odio semper cursus.', 8),
+('AT Institute', 'vestibulum massa', 'augue eu', '2020-10-03', 'Top 10 Tips To Grow Your COVID-19', 'aliquet molestie tellus. Aenean egestas.', 1),
+('Urna PC', 'velit. Cras', 'pede et', '2021-07-09', 'COVID-19 Made Simple', 'vehicula risus. Nulla eget metus',19),
+('Savannah Warner', 'non enim', 'Ut tincidunt', '2021-04-21', 'How To Use COVID-19 To Desire', 'luctus lobortis. Class aptent taciti sociosqu ad.', 4),
+('Gay Bond', 'non arcu.', 'sit amet', '2019-12-09', '22 Tips To Start Building A COVID-19', 'diam lorem, auctor quis, tristique', 18),
+('Yuli Michael', 'pretium neque.', 'Suspendisse tristique', '2021-04-21', 'How To Win Buyers And Influence Sales with COVID-19', 'Suspendisse sagittis. Nullam vitae diam.', 6),
+('Quentin Clark', 'luctus et', 'Donec est', '2020-11-30', 'Want To Step Up Your COVID-19? You Need To Read This', 'libero lacus, varius', 13),
+('Semper Consulting', 'mauris ut', 'penatibus et', '2020-06-29', 'Take 10 Minutes to Get Started With COVID-19', 'Aliquam ultrices iaculis odio. Nam', 29),
+('Nulla Foundation', 'vitae odio', 'tincidunt, nunc', '2019-11-20', '7 Rules About COVID-19 Meant To Be Broken', 'eu metus. In lorem. Donec elementum, lorem ut aliquam.', 16),
+('Norman Tran', 'Fusce dolor', 'Cras eu', '2020-03-20', 'The Death Of COVID-19 And How To Avoid It', 'Sed nec', 17),
+('Joe Smith', 'ligula. Donec', 'magna tellus', '2021-12-03', 'Your Key To Success: COVID-19', 'convallis est, vitae.', 8),
+('Joe Smith', 'defef', 'carta nf', '2021-12-12', 'Your COVID-19', 'convolu', 8),
+('Quentin Clark', 'wer', 'estes', '2020-11-17', 'You Need To Read This', 'libero lacus, varius',13);
+
+INSERT INTO proStaTerRecords (pstID, totPopulation, totDeaths, infectedNoVaccine,timestamp) VALUES
+(1, 9928163, 746923, 6993463,'2022-07-20 08:52:27'),
+(2, 6681963, 546421, 4393421,'2022-01-30 21:33:17'),
+(3, 5024279, 245987, 3194782,'2022-07-19 19:55:27'),
+(4,  39538223, 2228471, 19319392,'2022-06-06 16:28:24'),
+(5,  969697, 198283, 402890,'2022-05-06 02:33:09'),
+(6,  820940, 168482, 392089,'2022-04-06 13:12:30'),
+(7,  5666264, 969185, 2289161,'2022-01-08 00:04:31'),
+(8,  1779254, 168482, 392089,'2022-02-08 18:22:58'),
+(9,  23162123, 2177265, 10392746,'2022-04-07 21:56:33'),
+(10,  21893095, 2028996, 9323060,'2022-02-26 15:35:09'),
+(11,  5455692, 617765, 1939244,'2022-04-08 11:34:52'),
+(12,  5440463, 415899, 1790242,'2022-04-05 19:27:13'),
+(13,  11575000, 241777, 3936976,'2022-01-01 08:13:53'),
+(14,  5174718, 125198, 3790288,'2022-03-17 10:27:37'),
+(15,  5715190, 541247, 1945722,'2022-07-20 13:40:18'),
+(16,  4801468, 185273, 279181,'2022-07-10 07:58:59'),
+(17,  9788739, 949165, 6992872,'2022-04-04 13:42:21'),
+(18,  8915164, 8188764, 5991771,'2022-06-20 22:21:04'),
+(19,  1133700, 91288, 694572,'2022-06-09 21:44:48'),
+(20,  1032800, 85271, 679111,'2022-02-23 15:20:13');
+
+
+-- ******* QUERIES *******
+
+/* 
+ * QUERY 10
+ * 
+ **/
+
+SELECT uType AS role, IFNULL(username, 'NONE'), fName AS firstName, lName AS lastName, cName AS citizenship, email, phoneNum
+FROM Users u, (SELECT u.uID, username
+	  FROM Users u LEFT JOIN specialUser su
+	  ON u.uID = su.uID) AS allUsers, 
+proStaTer pst, Country c 
+WHERE u.uID = allUsers.uID AND u.pstID = pst.pstID AND pst.cID = c.cID
+ORDER BY role, citizenship ASC;
+
+/* 
+ * QUERY 13
+ * 
+ **/
+
 WITH
 cte1 AS
     (SELECT specialUser.username,Suspension.uID,suspendDate FROM Suspension LEFT JOIN specialUser ON Suspension.uID = specialUser.uID)
@@ -124,24 +421,40 @@ SELECT cte1.username,fName,lName,cName,email,phoneNum,cte1.suspendDate FROM cte1
 WHERE Users.uID IN (SELECT uID FROM Suspension) AND Users.pstID = proStaTer.pstID AND proStaTer.cID = Country.cID AND cte1.uID = Users.uID
 ORDER BY suspendDate;
 
-# Query 14
+/* 
+ * QUERY 14
+ * 
+ **/
+ 
 SELECT pubDate,majTopic,minTopic,summary,artTitle FROM Article
 WHERE Article.authName = '' #some input
 ORDER BY pubDate;
 
-# Query 15
+/* 
+ * QUERY 15
+ * 
+ **/
+ 
 SELECT authName,cName,COUNT(artTitle) AS numOfPublications FROM Article,Users,proStaTer, Country
 WHERE Article.uID = Users.uID AND Users.pstID = proStaTer.pstID AND proStaTer.cID = Country.cID
 GROUP BY Article.uID
 ORDER BY numOfPublications DESC;
 
-# Query 16
+/* 
+ * QUERY 16
+ * 
+ **/
+
 SELECT rName,cName,COUNT(authName) AS totAuthors,COUNT(artTitle) AS numOfPublications FROM Region,Country,Article, Users, proStaTer
 WHERE Country.rID = Region.rID AND Article.uID = Users.uID AND Users.pstID = proStaTer.pstID and proStaTer.cID = Country.cID
 GROUP BY cName,rName
 ORDER BY rName ASC, numOfPublications DESC;
 
-# Query 17
+/* 
+ * QUERY 17
+ * 
+ **/
+ 
 WITH
     cte1 AS (SELECT pstName,proStaTer.pstID,SUM(vacTotal) AS totalVaccinated,SUM(vacButDied) AS totalVaccinatedbutDied FROM VaccineCompany,proStaTer
              WHERE proStaTer.pstID = VaccineCompany.pstID
