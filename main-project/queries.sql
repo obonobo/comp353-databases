@@ -32,7 +32,6 @@ CREATE TABLE proStaTerRecords (
     totDeaths         INTEGER,
     infectedNoVaccine INTEGER,
     timestamp DATETIME,
-
     PRIMARY KEY (pstID,timestamp),
     FOREIGN KEY (pstID) REFERENCES proStaTer(pstID)
 );
@@ -156,6 +155,28 @@ FROM (
     FROM EmailRegistration
     WHERE author = NEW.authName
 ) AS Subscribers;
+
+-- This view is used for both q11 and q12
+CREATE VIEW Authors AS (
+    SELECT
+        specialUser.username AS username,
+        Organization.orgName AS fullName,
+        Country.cName AS citizenship
+    FROM orgDelagate
+        JOIN Users ON Users.uID = orgDelagate.uID
+        JOIN specialUser ON specialUser.uID = Users.uID
+        JOIN Organization ON Organization.oID = orgDelagate.oID
+        JOIN Country ON Country.cID = Organization.cID
+    UNION
+    SELECT
+        specialUser.username AS username,
+        CONCAT(Users.fName, ' ', Users.lName) AS fullName,
+        Country.cName AS citizenship
+    FROM specialUser
+        JOIN Users ON Users.uID = specialUser.uID
+        JOIN proStaTer ON proStaTer.pstID = Users.pstID
+        JOIN Country ON Country.cID = proStaTer.cID
+);
 
 
 -- ******* INSERT STATEMENTS *******
@@ -573,28 +594,6 @@ ORDER BY role, citizenship ASC;
  * QUERY 11
  *
  **/
-
--- This view is used for both q11 and q12
-CREATE VIEW Authors AS (
-    SELECT
-        specialUser.username AS username,
-        Organization.orgName AS fullName,
-        Country.cName AS citizenship
-    FROM orgDelagate
-        JOIN Users ON Users.uID = orgDelagate.uID
-        JOIN specialUser ON specialUser.uID = Users.uID
-        JOIN Organization ON Organization.oID = orgDelagate.oID
-        JOIN Country ON Country.cID = Organization.cID
-    UNION
-    SELECT
-        specialUser.username AS username,
-        CONCAT(Users.fName, ' ', Users.lName) AS fullName,
-        Country.cName AS citizenship
-    FROM specialUser
-        JOIN Users ON Users.uID = specialUser.uID
-        JOIN proStaTer ON proStaTer.pstID = Users.pstID
-        JOIN Country ON Country.cID = proStaTer.cID
-);
 
 SELECT
     Authors.fullName AS author,
