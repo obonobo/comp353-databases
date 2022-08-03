@@ -594,7 +594,6 @@ ORDER BY role, citizenship ASC;
  * QUERY 11
  *
  **/
-
 SELECT
     Authors.fullName AS author,
     Article.majTopic AS majorTopic,
@@ -751,6 +750,16 @@ FROM Emails
     JOIN Users ON Users.uID = specialUser.uID
 WHERE EXTRACT(YEAR FROM Emails.timestamp) = 2022
 ORDER BY Emails.timestamp ASC;
+
+-- Q18 with date pickers:
+/*
+SELECT Emails.timestamp, Users.email, Emails.subject
+FROM Emails
+    JOIN specialUser ON Emails.username = specialUser.username
+    JOIN Users ON Users.uID = specialUser.uID
+WHERE DATE(Emails.timestamp) >= :from AND DATE(Emails.timestamp) <= :to
+ORDER BY Emails.timestamp ASC;
+*/
 
 /*
  * QUERY 19

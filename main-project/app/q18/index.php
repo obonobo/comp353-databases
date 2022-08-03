@@ -36,7 +36,7 @@ require_once '../database.php';
         FROM Emails
             JOIN specialUser ON Emails.username = specialUser.username
             JOIN Users ON Users.uID = specialUser.uID
-        WHERE Emails.timestamp >= :from AND Emails.timestamp <= :to
+        WHERE DATE(Emails.timestamp) >= :from AND DATE(Emails.timestamp) <= :to
         ORDER BY Emails.timestamp ASC;
         SQL);
 
