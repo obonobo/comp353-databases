@@ -2,7 +2,7 @@
 
 $statement = $conn->prepare(<<<SQL
 SELECT uType AS role,
-    IFNULL(username, 'NONE'),
+    IFNULL(username, 'NONE') AS username,
     fName AS firstName,
     lName AS lastName,
     cName AS citizenship,

@@ -550,7 +550,7 @@ INSERT INTO VaccineRecords (compID, vacButInfected, vacButDied, vacTotal, timest
  *
  **/
 SELECT uType AS role,
-    IFNULL(username, 'NONE'),
+    IFNULL(username, 'NONE') AS username,
     fName AS firstName,
     lName AS lastName,
     cName AS citizenship,
