@@ -69,6 +69,13 @@ CREATE TABLE Article (
     FOREIGN KEY (authName) REFERENCES specialUser(username)
 );
 
+-- This table is used in q12, the system should support deleting articles
+CREATE TABLE RemovedArticles(
+    aID INTEGER NOT NULL PRIMARY KEY,
+    removalDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (aID) REFERENCES Article(aID)
+);
+
 CREATE TABLE Researcher (
     researcherID INTEGER AUTO_INCREMENT PRIMARY KEY,
     uID INTEGER NOT NULL,
@@ -204,86 +211,86 @@ INSERT INTO proStaTer (cID, pstName) VALUES
 (1, 'Haifa');
 
 INSERT INTO VaccineCompany (vaccine,pstID) VALUES
-  ('Pfizer',1),
-  ('Moderna',1),
-  ('Johnson & Johnson',1),
-  ('AstraZeneca',1),
-  ('Pfizer',2),
-  ('Moderna',2),
-  ('Johnson & Johnson',2),
-  ('AstraZeneca',2),
-  ('Pfizer',3),
-  ('Moderna,',3),
-  ('Johnson & Johnson',3),
-  ('AstraZeneca',3),
-  ('Pfizer',4),
-  ('Moderna',4),
-  ('Johnson & Johnson',4),
-  ('AstraZeneca',4),
-  ('Pfizer',5),
-  ('Moderna',5),
-  ('Johnson & Johnson',5),
-  ('AstraZeneca',5),
-  ('Pfizer',6),
-  ('Moderna.',6),
-  ('Johnson & Johnson',6),
-  ('AstraZeneca',6),
-  ('Pfizer',7),
-  ('Moderna.',7),
-  ('Johnson & Johnson',7),
-  ('AstraZeneca',7),
-  ('Pfizer',8),
-  ('Moderna',8),
-  ('Johnson & Johnson',8),
-  ('AstraZeneca',8),
-  ('Pfizer',9),
-  ('Moderna',9),
-  ('Johnson & Johnson',9),
-  ('AstraZeneca',9),
-  ('Pfizer',10),
-  ('Moderna',10),
-  ('Johnson & Johnson.',10),
-  ('AstraZeneca',10),
-  ('Pfizer',11),
-  ('Moderna,',11),
-  ('Johnson & Johnson.',11),
-  ('AstraZeneca',11),
-  ('Pfizer',12),
-  ('Moderna.',12),
-  ('Johnson & Johnson',12),
-  ('AstraZeneca',12),
-  ('Pfizer.',13),
-  ('Moderna,',13),
-  ('Johnson & Johnson',13),
-  ('AstraZeneca',13),
-  ('Pfizer',14),
-  ('Moderna.',14),
-  ('Johnson & Johnson',14),
-  ('AstraZeneca',14),
-  ('Pfizer',15),
-  ('Moderna,',15),
-  ('Johnson & Johnson',15),
-  ('AstraZeneca',15),
-  ('Pfizer',16),
-  ('Moderna',16),
-  ('Johnson & Johnson',16),
-  ('AstraZeneca',16),
-  ('Pfizer',17),
-  ('Moderna',17),
-  ('Johnson & Johnson',17),
-  ('AstraZeneca',17),
-  ('Pfizer',18),
-  ('Moderna',18),
-  ('Johnson & Johnson',18),
-  ('AstraZeneca',18),
-  ('Pfizer',19),
-  ('Moderna,',19),
-  ('Johnson & Johnson',19),
-  ('AstraZeneca.',19),
-  ('Pfizer',20),
-  ('Moderna',20),
-  ('Johnson & Johnson',20),
-  ('AstraZeneca',20);
+('Pfizer',1),
+('Moderna',1),
+('Johnson & Johnson',1),
+('AstraZeneca',1),
+('Pfizer',2),
+('Moderna',2),
+('Johnson & Johnson',2),
+('AstraZeneca',2),
+('Pfizer',3),
+('Moderna,',3),
+('Johnson & Johnson',3),
+('AstraZeneca',3),
+('Pfizer',4),
+('Moderna',4),
+('Johnson & Johnson',4),
+('AstraZeneca',4),
+('Pfizer',5),
+('Moderna',5),
+('Johnson & Johnson',5),
+('AstraZeneca',5),
+('Pfizer',6),
+('Moderna.',6),
+('Johnson & Johnson',6),
+('AstraZeneca',6),
+('Pfizer',7),
+('Moderna.',7),
+('Johnson & Johnson',7),
+('AstraZeneca',7),
+('Pfizer',8),
+('Moderna',8),
+('Johnson & Johnson',8),
+('AstraZeneca',8),
+('Pfizer',9),
+('Moderna',9),
+('Johnson & Johnson',9),
+('AstraZeneca',9),
+('Pfizer',10),
+('Moderna',10),
+('Johnson & Johnson.',10),
+('AstraZeneca',10),
+('Pfizer',11),
+('Moderna,',11),
+('Johnson & Johnson.',11),
+('AstraZeneca',11),
+('Pfizer',12),
+('Moderna.',12),
+('Johnson & Johnson',12),
+('AstraZeneca',12),
+('Pfizer.',13),
+('Moderna,',13),
+('Johnson & Johnson',13),
+('AstraZeneca',13),
+('Pfizer',14),
+('Moderna.',14),
+('Johnson & Johnson',14),
+('AstraZeneca',14),
+('Pfizer',15),
+('Moderna,',15),
+('Johnson & Johnson',15),
+('AstraZeneca',15),
+('Pfizer',16),
+('Moderna',16),
+('Johnson & Johnson',16),
+('AstraZeneca',16),
+('Pfizer',17),
+('Moderna',17),
+('Johnson & Johnson',17),
+('AstraZeneca',17),
+('Pfizer',18),
+('Moderna',18),
+('Johnson & Johnson',18),
+('AstraZeneca',18),
+('Pfizer',19),
+('Moderna,',19),
+('Johnson & Johnson',19),
+('AstraZeneca.',19),
+('Pfizer',20),
+('Moderna',20),
+('Johnson & Johnson',20),
+('AstraZeneca',20);
 
 INSERT INTO Organization (orgName, orgType, cID) VALUES
 ('At Institute', 'ResearchCenter', 1),
@@ -456,6 +463,8 @@ INSERT INTO Article (authName, majTopic, minTopic, pubDate, artTitle, summary, u
 ('freddster', 'defef', 'carta nf', '2021-12-12', 'Your COVID-19', 'convolu', 8),
 ('wizard', 'wer', 'estes', '2020-11-17', 'You Need To Read This', 'libero lacus, varius',13);
 
+INSERT INTO RemovedArticles(aID) VALUES (5), (6), (7);
+
 INSERT INTO proStaTerRecords (pstID, totPopulation, totDeaths, infectedNoVaccine,timestamp) VALUES
 (1, 9928163, 746923, 6993463,'2022-07-20 08:52:27'),
 (1, 9928163, 746923, 6993463, '2022-01-11 08:52:27'),
@@ -573,27 +582,29 @@ ORDER BY role, citizenship ASC;
  * QUERY 11
  *
  **/
-WITH
-    Authors AS (
-        SELECT
-            specialUser.username AS username,
-            Organization.orgName AS fullName,
-            Country.cName AS citizenship
-        FROM orgDelagate
-            JOIN Users ON Users.uID = orgDelagate.uID
-            JOIN specialUser ON specialUser.uID = Users.uID
-            JOIN Organization ON Organization.oID = orgDelagate.oID
-            JOIN Country ON Country.cID = Organization.cID
-        UNION
-        SELECT
-            specialUser.username AS username,
-            CONCAT(Users.fName, ' ', Users.lName) AS fullName,
-            Country.cName AS citizenship
-        FROM specialUser
-            JOIN Users ON Users.uID = specialUser.uID
-            JOIN proStaTer ON proStaTer.pstID = Users.pstID
-            JOIN Country ON Country.cID = proStaTer.cID
-    )
+
+-- This view is used for both q11 and q12
+CREATE VIEW Authors AS (
+    SELECT
+        specialUser.username AS username,
+        Organization.orgName AS fullName,
+        Country.cName AS citizenship
+    FROM orgDelagate
+        JOIN Users ON Users.uID = orgDelagate.uID
+        JOIN specialUser ON specialUser.uID = Users.uID
+        JOIN Organization ON Organization.oID = orgDelagate.oID
+        JOIN Country ON Country.cID = Organization.cID
+    UNION
+    SELECT
+        specialUser.username AS username,
+        CONCAT(Users.fName, ' ', Users.lName) AS fullName,
+        Country.cName AS citizenship
+    FROM specialUser
+        JOIN Users ON Users.uID = specialUser.uID
+        JOIN proStaTer ON proStaTer.pstID = Users.pstID
+        JOIN Country ON Country.cID = proStaTer.cID
+);
+
 SELECT
     Authors.fullName AS author,
     Article.majTopic AS majorTopic,
@@ -602,14 +613,23 @@ SELECT
     Authors.citizenship AS citizenship
 FROM Article
     JOIN Authors ON Authors.username = Article.authName
+WHERE Article.aID NOT IN (SELECT aID FROM RemovedArticles)
 ORDER BY citizenship ASC, author ASC, publicationDate ASC;
-
 
 /*
  * QUERY 12
  *
  **/
-
+SELECT
+    Authors.fullName AS author,
+    Article.majTopic AS majorTopic,
+    Article.minTopic AS minorTopic,
+    Article.pubDate AS publicationDate,
+    Authors.citizenship AS citizenship
+FROM Article
+    JOIN Authors ON Authors.username = Article.authName
+    JOIN RemovedArticles ON RemovedArticles.aID = Article.aID
+ORDER BY citizenship ASC, RemovedArticles.removalDate ASC;
 
 /*
  * QUERY 13
@@ -666,7 +686,7 @@ FROM Article,
 WHERE Article.uID = Users.uID
     AND Users.pstID = proStaTer.pstID
     AND proStaTer.cID = Country.cID
-GROUP BY Article.uID
+GROUP BY authName, Article.uID
 ORDER BY numOfPublications DESC;
 
 /*
@@ -699,16 +719,18 @@ WITH
             proStaTer.pstID,
             SUM(vacTotal) AS totalVaccinated,
             SUM(vacButDied) AS totalVaccinatedbutDied
-        FROM VaccineCompany, proStaTer
+        FROM VaccineCompany, proStaTer, VaccineRecords
         WHERE proStaTer.pstID = VaccineCompany.pstID
-        GROUP BY proStaTer.pstName
+        AND VaccineRecords.compID = VaccineCompany.compID
+        GROUP BY proStaTer.pstName, proStaTer.pstID
     ),
     cte2 AS (
         SELECT cName,
             SUM(totPopulation) AS popSum,
             SUM(totDeaths) AS deathSum
-        FROM proStaTer, Country
+        FROM proStaTer, Country, proStaTerRecords
         WHERE Country.cID = proStaTer.cID
+        AND proStaTer.pstID = proStaTerRecords.pstID
         GROUP BY proStaTer.cID
     )
 SELECT rName,
@@ -726,7 +748,7 @@ WHERE Region.rID = Country.rID
     AND Country.cName = cte2.cName
     AND proStaTer.pstID = cte1.pstID
     AND proStaTer.cID = Country.cID
-GROUP BY Country.cID
+GROUP BY Country.cID, cte2.popSum, cte2.deathSum
 ORDER BY cte2.deathSum ASC;
 
 /*

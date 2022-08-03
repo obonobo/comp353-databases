@@ -17,6 +17,7 @@ main() (
     for command in "$@"; do
         case $command in
             xampp) run_xampp ;;
+            [0-9]) sleep "$command" ;;
             connect_mysql) connect_mysql ;;
             c|connect|connect_postgres) connect_postgres ;;
             p|postgres) db_postgres ;;
