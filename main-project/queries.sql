@@ -103,21 +103,12 @@ CREATE TABLE VaccineCompany (
     FOREIGN KEY (pstID) REFERENCES proStaTer(pstID)
 );
 
-CREATE TABLE VaccineCompany (
-    compID INTEGER AUTO_INCREMENT PRIMARY KEY,
-    vaccine VARCHAR(255),
-    pstID INTEGER,
-    FOREIGN KEY (pstID) REFERENCES proStaTer(pstID)
-);
-
 CREATE TABLE VaccineRecords(
-
     compID INTEGER,
     vacButInfected INTEGER,
     vacButDied INTEGER,
     vacTotal INTEGER,
     timestamp DATETIME,
-
     PRIMARY KEY (compID,timestamp),
     FOREIGN KEY (compID) REFERENCES VaccineCompany(compID)
 );

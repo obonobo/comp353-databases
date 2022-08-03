@@ -47,7 +47,6 @@ if (
         <input type='text' name="summary" id="summary"> <br>
         <label for="uID">uID</label><br>
         <input type='number' name="uID" id="uID"> <br>
-
         <button type="submit">Add</button>
     </form>
 </body>

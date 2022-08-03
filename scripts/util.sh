@@ -17,6 +17,7 @@ main() (
     for command in "$@"; do
         case $command in
             xampp) run_xampp ;;
+            connect_xampp) connect_xampp ;;
             [0-9]) sleep "$command" ;;
             connect_mysql) connect_mysql ;;
             c|connect|connect_postgres) connect_postgres ;;
@@ -125,6 +126,24 @@ run_xampp() {
         --publish 41062:80 \
         --mount "type=bind,source=${PWD}/app,target=/www" \
         tomsik68/xampp:latest
+}
+
+# Binaries (mysql, etc.) installed in /opt/lampp/bin
+connect_xampp() {
+    # docker exec -it "$xampphost" /opt/lampp/bin/mysql \
+    #     --database="root" \
+    #     --user="root"
+    #     # --password="$auth"
+
+    # docker exec -it "$xampphost" bash
+    # export PATH=/opt/lampp/bin:$PATH
+    #
+
+    mysql \
+        --host=localhost \
+        --port=3306 \
+        --database="tester1" \
+        --user="root"
 }
 
 
