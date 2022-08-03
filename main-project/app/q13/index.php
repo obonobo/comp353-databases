@@ -19,11 +19,11 @@ $statement->execute();
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Users</title>
+    <title>Q13</title>
 </head>
 
 <body>
-    <h1>Q10</h1>
+    <h1>Q13</h1>
 
     <table>
         <thead>
@@ -35,7 +35,6 @@ $statement->execute();
                 <td>phoneNum</td>
                 <td>email</td>
                 <td>suspendDate</td>
-
             </tr>
         </thead>
         <tbody>
@@ -48,7 +47,6 @@ $statement->execute();
                     <td><?= $row["phoneNum"] ?></td>
                     <td><?= $row["email"] ?></td>
                     <td><?= $row["suspendDate"] ?></td>
-
                 </tr>
             <?php } ?>
         </tbody>

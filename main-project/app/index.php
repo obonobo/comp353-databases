@@ -40,11 +40,7 @@
     <br>
     <a href=q13/index.php>Query #13</a>
     <br>
-
-    <!-- !!! THIS QUESTION NEEDS A FORM SUBMISSION  !!! -->
     <a href=q14/index.php>Query #14</a>
-    <!-- !!! THIS QUESTION NEEDS A FORM SUBMISSION  !!! -->
-
     <br>
     <a href=q15/index.php>Query #15</a>
     <br>
